@@ -9,6 +9,7 @@ button {
   border-radius: 0.8rem;
   cursor: pointer;
   white-space: noWrap;
+  background-color: transparent;
 }
 
 /******** button size ********/
