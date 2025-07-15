@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  border-radius: 8px;
+  border-radius: 0.8rem;
 }
 
 .input {
@@ -21,7 +21,7 @@
 .icon {
   position: absolute;
   top: 50%;
-  left: 16px;
+  left: 1.6rem;
   transform: translateY(-50%);
   font-size: 1.6rem;
   color: var(--gray-color-40);
@@ -30,67 +30,67 @@
 
 /* input 전용 padding-left */
 .wrapper:not(.textareaWrapper) .input {
-  padding: 12px 16px 12px 50px;
+  padding: 1.2rem 1.6rem 1.2rem 5rem;
 }
 
 /* textarea 전용 padding */
 .textareaWrapper .input {
-  padding: 20px;
+  padding: 0.2rem;
 }
 
 /******** Variant ********/
 .primary {
-  border: 1px solid var(--gray-color-40);
+  border: 0.1rem solid var(--gray-color-40);
   background-color: var(--gray-color-10);
 }
 .focused.primary {
-  border: 2px solid var(--brown-color-40);
+  border: 0.2rem solid var(--brown-color-40);
 }
 .filled.primary .input {
   color: var(--gray-color-60);
 }
 
 .outline {
-  border: 1px solid var(--gray-color-40);
+  border: 0.1rem solid var(--gray-color-40);
   background-color: transparent;
   color: var(--gray-color-40);
 }
 .filled {
-  border: 2px solid var(--brown-color-40);
+  border: 0.2rem solid var(--brown-color-40);
   /* background-color: var(--gray-color-20); */
   color: var(--gray-color-60);
 }
 
 /******** Size ********/
 .large .input {
-  padding: 14px 20px 14px 48px; /* 아이콘 여백 고려 */
+  padding: 1.4rem 2rem 1.4rem 4.08rem; /* 아이콘 여백 고려 */
   font-size: 2rem;
 }
 .medium .input {
-  padding: 12px 16px 12px 40px;
+  padding: 1.2rem 1.6rem 1.2rem 4rem;
   font-size: var(--font-body-3);
 }
 .small .input {
-  padding: 8px 12px 8px 36px;
+  padding: 0.8rem 1.2rem 0.8rem 3.6rem;
   font-size: var(--font-caption-1);
 }
 .xsmall .input {
-  padding: 6px 8px 6px 32px;
+  padding: 0.6rem 0.8rem 0.6rem 32rem;
   font-size: 1.2rem;
 }
 
 /* textarea 전용 예외 처리 */
 .textareaWrapper.large .input {
-  padding: 16px;
+  padding: 1.6rem;
 }
 .textareaWrapper.medium .input {
-  padding: 14px;
+  padding: 1.4rem;
 }
 .textareaWrapper.small .input {
-  padding: 12px;
+  padding: 1.2rem;
 }
 .textareaWrapper.xsmall .input {
-  padding: 10px;
+  padding: 1rem;
 }
 
 /******** Disabled ********/
