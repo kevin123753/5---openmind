@@ -1,0 +1,33 @@
+:root {
+  /******** Color ********/
+
+  /* gray */
+  --gray-color-10: #ffffff;
+  --gray-color-20: #f9f9f9;
+  --gray-color-30: #cfcfcf;
+  --gray-color-40: #818181;
+  --gray-color-50: #515151;
+  --gray-color-60: #000000;
+  /* brown */
+  --brown-color-10: #f5f1ee;
+  --brown-color-20: #e4d5c9;
+  --brown-color-30: #c7bbb5;
+  --brown-color-40: #542f1a;
+  --brown-color-50: #341909;
+  /* point */
+  --blue-color-50: #1877f2;
+  --yellow-color-50: #fee500;
+  --red-color-50: #b93333;
+
+  /******** Font ********/
+
+  /* size */
+  --font-h1: 4rem;
+  --font-h2: 3.2rem;
+  --font-h3: 2.4rem;
+  --font-body-1: 2rem;
+  --font-body-2: 1.8rem;
+  --font-body-3: 1.6rem;
+  --font-caption-1: 1.4rem;
+  /* weight */
+}
