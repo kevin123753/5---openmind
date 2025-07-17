@@ -1,11 +1,7 @@
-import { useContext } from "react";
-import UserNameContext from "../../context/userNameContext";
-
-const AnswerList = ({ item }) => {
-  const userName = useContext(UserNameContext);
+const AnswerList = ({ item, img, userName }) => {
   return (
     <div className="questionContent">
-      <img src="/image/post/profile1.jpg" alt="작은 프로필" />
+      <img src={img} alt="작은 프로필" />
       <div>
         <p className="user">
           {userName}

@@ -2,7 +2,7 @@ import Badge from "../../components/Badge/Badge";
 import Reaction from "../../components/Reaction/Reaction";
 import AnswerList from "../post/AnswerList";
 
-const QuestionList = ({ data }) => {
+const QuestionList = ({ data, img, userName, dayjs }) => {
   return (
     <>
       {data.map((item) => (
@@ -10,11 +10,11 @@ const QuestionList = ({ data }) => {
           <Badge badgeActive={item.answer !== null} />
           <div className="titleContent">
             <p className="subTitle">
-              질문<span>{item.createdAt}</span>
+              질문<span>{dayjs(item.createdAt).fromNow()}</span>
             </p>
             <p className="title">{item.content}</p>
           </div>
-          {item.answer && <AnswerList item={item} />}
+          {item.answer && <AnswerList item={item} img={img} userName={userName} />}
           <div className="likeContent">
             <Reaction like={item.like} dislike={item.dislike} />
           </div>

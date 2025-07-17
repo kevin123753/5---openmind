@@ -74,11 +74,17 @@ function QuestionListPage() {
     }
   };
 
-  const handleCardClick = (id) => {
-    if (!id) {
+  const handleCardClick = (subject) => {
+    if (!subject.id) {
       alert("질문 대상이 없습니다.");
     } else {
-      navigate(`/post/${id}`);
+      navigate(`/post/${subject.id}`, {
+        state: {
+          id: subject.id,
+          name: subject.name,
+          imageSource: subject.imageSource,
+        },
+      });
     }
   };
 
@@ -116,7 +122,7 @@ function QuestionListPage() {
                 key={subject.id}
                 subject={subject}
                 imageUrl={subject.imageSource}
-                onClick={() => handleCardClick(subject.id)}
+                onClick={() => handleCardClick(subject)}
               />
             ))
           )}

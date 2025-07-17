@@ -1,14 +1,12 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { createQuestion } from "../../features/post/postService";
-import UserNameContext from "../../context/userNameContext";
 
 import styles from "./Modal.module.css";
 import Input from "../Input/Input";
 import Button from "../Button/Button";
 import CloseIcon from "../Icon/modalCloseIcon";
 
-const Modal = ({ setModal, id, setQueList, img }) => {
-  const userName = useContext(UserNameContext);
+const Modal = ({ setModal, id, setQueList, img, userName }) => {
   const [question, setQuestion] = useState("");
 
   // 질문 로컬스토리지 저장

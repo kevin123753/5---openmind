@@ -7,10 +7,14 @@ export async function createSubjectAndNavigate(name, navigate, setError, setLoad
     setError(null);
     setLoading(true);
     const result = await createSubject({ name });
-    setItem("name", result.name);
-    setItem("imageSource", result.imageSource);
     setItem("mySubjectId", result.id);
-    navigate(`/post/${result.id}`);
+    navigate(`/post/${result.id}/answer`, {
+      state: {
+        id: result.id,
+        name: result.name,
+        imageSource: result.imageSource,
+      },
+    });
   } catch (error) {
     setError(error.message || "잠시 후 다시 시도해 주세요.");
   } finally {

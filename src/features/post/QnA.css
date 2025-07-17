@@ -139,3 +139,11 @@
   justify-content: center;
   padding: 5.4rem 0 4.9rem;
 }
+
+/* 답변하기 페이지 삭제 버튼 */
+.inner:has(.removeBtn) {
+  gap: 0.9rem;
+}
+.removeBtn {
+  align-self: flex-end;
+}
