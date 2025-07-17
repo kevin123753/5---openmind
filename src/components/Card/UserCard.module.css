@@ -1,0 +1,84 @@
+.cardWrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2.4rem; /* 좌우 최소 여백 24px */
+  box-sizing: border-box;
+}
+
+.cardGrid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
+  gap: 2rem;
+  box-sizing: border-box;
+}
+
+.userCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  /* min-width: 18.6rem; */
+  max-width: 25rem;
+  height: 18.7rem;
+  padding: 2.4rem;
+  border-radius: 1.6rem;
+  border: 0.1rem solid var(--gray-color-40);
+  background-color: var(--gray-color-10);
+  box-sizing: border-box;
+}
+
+.profileImg {
+  width: clamp(40px, 5vw, 60px);
+  height: clamp(40px, 5vw, 60px);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.nickname {
+  font-size: clamp(1.8rem, 2vw, 2rem);
+  font-weight: 400;
+  color: #000;
+  text-align: start;
+  padding: 1.5rem 0 2rem 0;
+  box-sizing: border-box;
+}
+
+.answer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: clamp(1.4rem, 2vw 1.8rem);
+  color: var(--gray-color-40);
+  width: 100%;
+}
+
+.answerLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.answerRight {
+  font-size: clamp(1.4rem, 2vw, 1.6rem);
+}
+@media (max-width: 767px) {
+  .userCard {
+    height: 16.8rem;
+  }
+}
+.userCard {
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out;
+}
+
+.userCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 520px) {
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr); /* 무조건 2단 이상 */
+  }
+}

@@ -1,0 +1,112 @@
+/******** common ********/
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/******** button size ********/
+.large {
+  padding: 14px 49px;
+  font-size: 2rem;
+}
+.medium {
+  padding: 12px 24px;
+  font-size: var(--font-body-3);
+}
+.small {
+  padding: 8px 12px;
+  font-size: var(--font-caption-1);
+}
+.xsmall {
+  padding: 11px 11px;
+}
+
+/******** button variant ********/
+
+/* primary */
+.primary {
+  background-color: var(--brown-color-40);
+  color: var(--gray-color-10);
+}
+.primary:hover {
+  border: 2px solid var(--brown-color-50);
+}
+.primary:active {
+  background-color: var(--brown-color-50);
+}
+.primary:disabled {
+  border: 2px solid transparent;
+  background-color: var(--brown-color-30);
+}
+
+/* outline */
+.outline {
+  box-shadow: 0 0 0 1px var(--brown-color-40);
+  background-color: var(--brown-color-10);
+  color: var(--brown-color-40);
+}
+.outline:hover {
+  box-shadow: 0 0 0 2px var(--brown-color-40);
+}
+.outline:active {
+  box-shadow: 0 0 0 2px var(--brown-color-40);
+}
+.outline:disabled {
+  box-shadow: 0 0 0 1px var(--brown-color-30);
+  background-color: var(--brown-color-10);
+  color: var(--brown-color-30);
+}
+
+/* round */
+.round {
+  background-color: var(--brown-color-40);
+  color: var(--gray-color-10);
+  border-radius: 200px;
+}
+
+/******** etc variant ********/
+.styleKakao {
+  background-color: var(--yellow-color-50);
+  color: #000;
+  height: 100%;
+}
+.styleFacebook {
+  background-color: var(--blue-color-50);
+  color: #000;
+  height: 100%;
+}
+.styleLink {
+  background-color: var(--brown-color-40);
+  color: #fff;
+  height: 100%;
+}
+.button.large {
+  font-size: 1.8rem;
+  padding: 14px 24px;
+}
+
+.button.large:focus,
+.button.large:active,
+.button.large.clicked {
+  font-size: 1.8rem;
+  padding: 14px 24px;
+}
+
+@media (max-width: 1199px) and (min-width: 768px) {
+  .list-content {
+    margin: 40px 50px 97px;
+  }
+}
+
+@media (max-width: 767px) {
+  .list-content {
+    margin: 40px 24px 97px;
+  }
+}

@@ -1,0 +1,74 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+.list-page {
+  min-height: 100vh;
+  background-color: #f9f9f9;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 0;
+}
+.list-content {
+  margin: 40px 130px 97px;
+}
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+.list-logo {
+  width: 146px;
+  height: 57px;
+}
+.logo-link {
+  display: block;
+}
+.bottom-row {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.list-topic {
+  width: 341px;
+  height: 48px;
+  font-size: 37px;
+  font-weight: 400;
+}
+.sort-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  margin: 12px auto 30px;
+}
+
+.card-list {
+  display: grid;
+  gap: 20px;
+  margin-bottom: 46px;
+  grid-template-columns: repeat(4, 1fr); /* PC 기준 4개 고정 */
+}
+
+.active {
+  background-color: var(--brown-color-40); /* 원하는 색상 */
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 40px;
+}

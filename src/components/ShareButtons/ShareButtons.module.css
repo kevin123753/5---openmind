@@ -1,0 +1,52 @@
+/* ✅ [ShareButtons.module.css] 공유 버튼 묶음 스타일 */
+
+/* 📌 1. 버튼 묶음 컨테이너
+   - display: flex or inline-flex
+   - gap 또는 margin으로 버튼 사이 간격 확보
+   - align-items: center
+*/
+.shareButtons {
+  display: flex;
+  gap: 12px; /* 또는 margin-right 사용 */
+  align-items: center;
+}
+
+/* 📌 2. 개별 버튼 스타일 (공통)
+   - 크기: 24px ~ 32px
+   - border: none, background: transparent
+   - cursor: pointer
+   - transition: transform or opacity (hover 시)
+*/
+.button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  width: 28px;
+  height: 28px;
+
+  transition: transform 0.2s ease-in-out;
+}
+
+/* 📌 3. hover 효과
+   - 살짝 확대 or 색상 강조
+*/
+.button:hover {
+  transform: scale(1.1);
+}
+
+/* 📌 4. 각 플랫폼별 색상 강조 (선택)
+   - icon 또는 svg에 직접 적용하거나 버튼에 배경색 줄 수도 있음
+*/
+.kakao {
+  /* 예: 배경 노란색 or 아이콘 강조 */
+}
+
+.facebook {
+  /* 예: 파란색 강조 */
+}
+
+.copy {
+  /* 일반 회색 or 다크 강조 */
+}
