@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Button from "../../components/Button/Button.jsx";
-import UserCard from "../../components/Card/UserCard.jsx";
+import UserCard from "../../components/UserCard/UserCard.jsx";
 import { getItem } from "../../utils/localStorage";
 import { useNavigate, Link } from "react-router-dom";
 import styles from "./ListPage.module.css";

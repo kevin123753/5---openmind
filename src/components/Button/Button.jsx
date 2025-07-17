@@ -15,7 +15,7 @@ const Button = ({
 
   return (
     <button
-      className={`${styles[variant]} ${styles[size]} ${styles["button"]} ${newClassName}`}
+      className={`${styles[`${variant}`]} ${styles[`${size}`]} ${newClassName}`}
       disabled={disabled}
       onClick={onClick}
     >

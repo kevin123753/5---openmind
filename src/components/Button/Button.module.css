@@ -1,31 +1,32 @@
 /******** common ********/
-.button {
+button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 0.2rem;
   width: 100%;
-  border: 2px solid transparent;
-  border-radius: 8px;
+  border: 0.2rem solid transparent;
+  border-radius: 0.8rem;
   cursor: pointer;
   white-space: nowrap;
+  background-color: transparent;
 }
 
 /******** button size ********/
 .large {
-  padding: 14px 49px;
+  padding: 1.4rem 4.9rem;
   font-size: 2rem;
 }
 .medium {
-  padding: 12px 24px;
+  padding: 1.2rem 2.4rem;
   font-size: var(--font-body-3);
 }
 .small {
-  padding: 8px 12px;
+  padding: 0.8rem 1.2rem;
   font-size: var(--font-caption-1);
 }
 .xsmall {
-  padding: 11px 11px;
+  padding: 1.1rem 1.1rem;
 }
 
 /******** button variant ********/
@@ -36,30 +37,30 @@
   color: var(--gray-color-10);
 }
 .primary:hover {
-  border: 2px solid var(--brown-color-50);
+  border: 0.2rem solid var(--brown-color-50);
 }
 .primary:active {
   background-color: var(--brown-color-50);
 }
 .primary:disabled {
-  border: 2px solid transparent;
+  border: 0.2rem solid transparent;
   background-color: var(--brown-color-30);
 }
 
 /* outline */
 .outline {
-  box-shadow: 0 0 0 1px var(--brown-color-40);
+  box-shadow: 0 0 0 0.1rem var(--brown-color-40);
   background-color: var(--brown-color-10);
   color: var(--brown-color-40);
 }
 .outline:hover {
-  box-shadow: 0 0 0 2px var(--brown-color-40);
+  box-shadow: 0 0 0 0.2rem var(--brown-color-40);
 }
 .outline:active {
-  box-shadow: 0 0 0 2px var(--brown-color-40);
+  box-shadow: 0 0 0 0.2rem var(--brown-color-40);
 }
 .outline:disabled {
-  box-shadow: 0 0 0 1px var(--brown-color-30);
+  box-shadow: 0 0 0 0.1rem var(--brown-color-30);
   background-color: var(--brown-color-10);
   color: var(--brown-color-30);
 }
@@ -68,7 +69,7 @@
 .round {
   background-color: var(--brown-color-40);
   color: var(--gray-color-10);
-  border-radius: 200px;
+  border-radius: 20rem;
 }
 
 /******** etc variant ********/
@@ -86,27 +87,4 @@
   background-color: var(--brown-color-40);
   color: #fff;
   height: 100%;
-}
-.button.large {
-  font-size: 1.8rem;
-  padding: 14px 24px;
-}
-
-.button.large:focus,
-.button.large:active,
-.button.large.clicked {
-  font-size: 1.8rem;
-  padding: 14px 24px;
-}
-
-@media (max-width: 1199px) and (min-width: 768px) {
-  .list-content {
-    margin: 40px 50px 97px;
-  }
-}
-
-@media (max-width: 767px) {
-  .list-content {
-    margin: 40px 24px 97px;
-  }
 }
