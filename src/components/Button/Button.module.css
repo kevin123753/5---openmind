@@ -4,14 +4,12 @@ button {
   align-items: center;
   justify-content: center;
   gap: 0.2rem;
-  width: 100%;
   border: 0.2rem solid transparent;
   border-radius: 0.8rem;
+  background-color: transparent;
   cursor: pointer;
   white-space: nowrap;
-  background-color: transparent;
 }
-
 /******** button size ********/
 .large {
   padding: 1.4rem 4.9rem;

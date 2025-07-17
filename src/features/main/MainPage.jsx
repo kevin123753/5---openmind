@@ -31,25 +31,12 @@ function MainPage() {
 
   return (
     <div className={styles["home-page"]}>
-      <img
-        src={openmindLogo}
-        alt="OpenMind 로고"
-        className={styles["home-logo"]}
-      />
+      <img src={openmindLogo} alt="OpenMind 로고" className={styles["home-logo"]} />
 
-      <img
-        src={homeBackLogo}
-        className={styles["home-back-logo"]}
-        alt="OpenMind 배경이미지"
-      />
+      <img src={homeBackLogo} className={styles["home-back-logo"]} alt="OpenMind 배경이미지" />
 
       <div className={styles["home-question-button"]}>
-        <Button
-          variant="outline"
-          size={size}
-          rightIcon={<ArrowRightIcon />}
-          onClick={handleClick}
-        >
+        <Button variant="outline" size={size} rightIcon={<ArrowRightIcon />} onClick={handleClick}>
           질문하러 가기
         </Button>
       </div>
@@ -62,11 +49,7 @@ function MainPage() {
           value={name}
           onChange={handleChange}
         />
-        <Button
-          variant="primary"
-          size="medium"
-          disabled={isLoading || !name.trim()}
-        >
+        <Button variant="primary" size="medium" disabled={isLoading || !name.trim()}>
           {isLoading ? "로딩중입니다..." : "질문 받기"}
         </Button>
       </form>

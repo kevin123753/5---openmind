@@ -11,9 +11,7 @@ export async function createSubject({ name }) {
 }
 
 export async function getSubject({ sort = "time", offset = 0, limit = 8 }) {
-  const response = await fetch(
-    `${BASE_URL}/subjects/?sort=${sort}&offset=${offset}&limit=${limit}`
-  );
+  const response = await fetch(`${BASE_URL}/subjects/?sort=${sort}&offset=${offset}&limit=${limit}`);
   if (!response.ok) throw new Error("서버 오류");
   return await response.json();
 }

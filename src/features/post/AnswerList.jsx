@@ -1,0 +1,24 @@
+import { useContext } from "react";
+import UserNameContext from "../../context/userNameContext";
+
+const AnswerList = ({ item }) => {
+  const userName = useContext(UserNameContext);
+  return (
+    <div className="questionContent">
+      <img src="/image/post/profile1.jpg" alt="작은 프로필" />
+      <div>
+        <p className="user">
+          {userName}
+          <span>{item.createdAt}</span>
+        </p>
+        {!item.answer.isRejected ? (
+          <div className="qnaContent">답변{item.answer.content}</div>
+        ) : (
+          <p className="rejected">답변거절</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default AnswerList;

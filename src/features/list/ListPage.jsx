@@ -25,10 +25,7 @@ function QuestionListPage() {
   const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);
   const size = useResponsiveSize();
 
-  const pageNumbers = Array.from(
-    { length: endPage - startPage + 1 },
-    (_, i) => startPage + i
-  );
+  const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 
   const handlePrevGroup = () => {
     if (startPage > 1) {
@@ -90,19 +87,10 @@ function QuestionListPage() {
       <div className={styles["list-content"]}>
         <div className={styles["top-row"]}>
           <Link to="/" className={styles["logo-link"]}>
-            <img
-              src={openmindLogo}
-              alt="메인페이지 가기"
-              className={styles["list-logo"]}
-            />
+            <img src={openmindLogo} alt="메인페이지 가기" className={styles["list-logo"]} />
           </Link>
           <div className={styles["list-answer-button"]}>
-            <Button
-              variant="outline"
-              size={size}
-              rightIcon={<ArrowRightIcon />}
-              onClick={handleClick}
-            >
+            <Button variant="outline" size={size} rightIcon={<ArrowRightIcon />} onClick={handleClick}>
               답변 하러가기
             </Button>
           </div>
@@ -112,12 +100,7 @@ function QuestionListPage() {
           <h2 className={styles["list-topic"]}>누구에게 질문할까요?</h2>
           <div className={styles["sort-wrapper"]}>
             <label htmlFor="list">이름순</label>
-            <select
-              id="list"
-              value={sort}
-              onChange={handleSortChange}
-              className={styles["list-dropout"]}
-            >
+            <select id="list" value={sort} onChange={handleSortChange} className={styles["list-dropout"]}>
               <option value="name">이름순</option>
               <option value="time">최신순</option>
             </select>
@@ -148,8 +131,7 @@ function QuestionListPage() {
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
-              className={currentPage === page ? styles["active"] : ""}
-            >
+              className={currentPage === page ? styles["active"] : ""}>
               {page}
             </button>
           ))}
