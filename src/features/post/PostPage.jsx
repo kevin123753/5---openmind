@@ -25,7 +25,7 @@ const PostPage = () => {
   const [id, setId] = useState("");
   const [modal, setModal] = useState(false);
   const [queList, setQueList] = useState([]);
-
+  console.log(queList);
   return (
     <UserNameContext.Provider value={userName}>
       <div className="inner qAPage">

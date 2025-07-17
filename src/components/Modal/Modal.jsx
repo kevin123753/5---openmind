@@ -38,7 +38,7 @@ const Modal = ({ setModal, id, setQueList }) => {
         </div>
         <form onSubmit={handleSubmit}>
           <p className={styles.title}>
-            <p>아이디 {id}</p>
+            <span>아이디 {id}</span>
             <img src="/image/post/profile1.jpg" alt="사용자프로필 사진" />
             To.<span>{userName}</span>
           </p>

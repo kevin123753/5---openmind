@@ -12,7 +12,7 @@ const AnswerList = ({ item }) => {
           <span>2주전</span>
         </p>
         {!item.answer.isRejected ? (
-          <div className="qnaContent">{item.answer.content}</div>
+          <div className="qnaContent">답변{item.answer.content}</div>
         ) : (
           <p className="rejected">답변거절</p>
         )}

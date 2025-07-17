@@ -9,7 +9,7 @@ const QuestionList = ({ data }) => {
       {data.map((item) => (
         <div className="items shadow-1" key={item.id}>
           {/* answer 없을때 undefined 반환 맞는지 확인해봐야함! */}
-          <Badge badgeActive={item.answer !== undefined} />
+          <Badge badgeActive={item.answer !== null} />
           <div className="titleContent">
             <p className="subTitle">
               질문<span>2주전</span>
