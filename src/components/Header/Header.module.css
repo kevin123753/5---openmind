@@ -1,0 +1,15 @@
+/* Header */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 120rem;
+  min-height: 5.7rem;
+  margin: 0 auto;
+  padding: 4rem 0 4.6rem 0;
+  transition: all 0.5s;
+}
+header button {
+  margin-left: auto;
+}

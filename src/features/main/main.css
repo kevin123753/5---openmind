@@ -1,0 +1,18 @@
+/* Main page */
+main:has(.mainForm) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mainForm {
+  width: 40rem;
+  height: 17.2rem;
+  padding: 3.2rem;
+  background-color: var(--gray-color-10);
+}
+.mainFormInput {
+  width: 100%;
+}
+.mainFormBtn {
+  width: 100%;
+}

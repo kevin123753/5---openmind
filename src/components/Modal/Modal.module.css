@@ -1,0 +1,40 @@
+.modalContainer {
+}
+
+.dimmBg {
+  position: fixed;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.56);
+}
+.modalContent {
+  width: 61.2rem;
+  padding: 4.1rem 4rem 7rem;
+  border-radius: 2.4rem;
+  background-color: var(--gray-color-10);
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+}
+.title img {
+  width: 2.8rem;
+  height: 2.8rem;
+}
+.submitBtn {
+  width: 100%;
+  margin-top: 0.8rem;
+}
