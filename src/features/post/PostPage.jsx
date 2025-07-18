@@ -79,19 +79,50 @@ const PostPage = () => {
         <img src={img} alt="큰 프로필" />
         <h2>{userName}</h2>
         <div className="BtnContents">
-          <Button variant="round" size="xsmall" className="styleLink" leftIcon={<Link />} />
-          <Button variant="round" size="xsmall" className="styleKakao" leftIcon={<Kakao />} />
-          <Button variant="round" size="xsmall" className="styleFacebook" leftIcon={<Facebook />} />
+          <Button
+            variant="round"
+            size="xsmall"
+            className="styleLink"
+            leftIcon={<Link />}
+          />
+          <Button
+            variant="round"
+            size="xsmall"
+            className="styleKakao"
+            leftIcon={<Kakao />}
+          />
+          <Button
+            variant="round"
+            size="xsmall"
+            className="styleFacebook"
+            leftIcon={<Facebook />}
+          />
         </div>
       </div>
       <div className="container">
         <h3>
           <MessagesIcon />
-          {queList.length ? `${queList.length}개의 질문이 있습니다` : `아직 질문이 없습니다`}
+          {queList.length
+            ? `${queList.length}개의 질문이 있습니다`
+            : `아직 질문이 없습니다`}
         </h3>
-        {queList.length ? <QuestionList data={queList} img={img} userName={userName} dayjs={dayjs} /> : <NoQuestion />}
+        {queList.length ? (
+          <QuestionList
+            data={queList}
+            img={img}
+            userName={userName}
+            dayjs={dayjs}
+          />
+        ) : (
+          <NoQuestion />
+        )}
       </div>
-      <Button variant="round" size="large" className="shadow-2 queBtn" onClick={() => setModal(!modal)}>
+      <Button
+        variant="round"
+        size="large"
+        className="shadow-2 queBtn"
+        onClick={() => setModal(!modal)}
+      >
         질문 작성하기
       </Button>
       {modal && (
