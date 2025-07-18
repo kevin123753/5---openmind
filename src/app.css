@@ -1,0 +1,47 @@
+/****** 공통 레이아웃 ******/
+.wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--gray-color-20);
+}
+
+/* App main */
+main {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 120rem;
+  margin: 0 auto;
+}
+
+/****** Q&A 페이지 예외처리 ******/
+.wrap:has(.qAPage) header {
+  justify-content: center;
+}
+.wrap:has(.qAPage) header button {
+  display: none;
+}
+
+/****** 반응형 ******/
+
+@media (max-width: 767px) {
+  .header {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .header button {
+    margin-left: 0;
+  }
+  main {
+    padding: 0 2.4rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .header {
+    padding: 4rem 5rem 4.6rem;
+  }
+  main {
+    padding: 0 3.2rem;
+  }
+}

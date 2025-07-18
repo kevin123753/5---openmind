@@ -1,24 +1,11 @@
-html,
-body {
-  margin: 0;
-  padding: 0;
-}
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
 .list-page {
-  min-height: 100vh;
-  background-color: #f9f9f9;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  z-index: 0;
+  /* display: flex;
+  flex-direction: column; */
+  display: grid;
 }
-.list-content {
+/* .list-content {
   margin: 40px 130px 97px;
-}
+} */
 .top-row {
   display: flex;
   justify-content: space-between;

@@ -1,25 +1,61 @@
-html,
-body {
-  margin: 0;
-  padding: 0;
+/* Main page */
+main:has(.homePage) {
+  background: url(/image/homeBg.png) no-repeat bottom center;
 }
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-.home-page {
-  min-height: 100vh;
-  position: relative;
-  background-color: #f9f9f9;
-  width: 100%;
+.homePage {
   display: flex;
   flex-direction: column;
-  z-index: 0;
-  justify-content: center; /* ← 수직 가운데 정렬 */
+  justify-content: center;
+  align-items: center;
+  gap: 2.4rem;
+  padding-top: 2.3rem;
+}
+main:has(.homeForm) {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.homeForm {
+  width: 40rem;
+  height: 17.2rem;
+  padding: 3.2rem;
+  border-radius: 1.6rem;
+  background-color: var(--gray-color-10);
+}
+.homeForm input {
+  width: 100%;
+}
+.homeForm button {
+  width: 100%;
+  margin-top: 1.6rem;
+}
+
+@media (max-width: 767px) {
+  header:has(+ main .homePage) {
+    position: absolute;
+    top: 16.2rem;
+  }
+  header:has(+ main .homePage) button {
+    padding: 0.8rem 1.2rem;
+    font-size: 1.4rem;
+  }
+  .homePage {
+    gap: 8.2rem;
+    padding-top: 8rem;
+  }
+  .logo {
+    width: 24.8rem;
+  }
+}
+
+/*
+.home-page {
+  width: 100%;
+  flex-direction: column;
+  justify-content: center; 
   align-items: center;
 }
-.home-question-button {
+ .home-question-button {
   position: absolute;
   top: 45px;
   right: 130px;
@@ -41,9 +77,9 @@ body {
   display: block;
   flex-shrink: 0;
   z-index: 2;
-}
+} */
 
-.home-form {
+/* .home-form {
   width: 400px;
   border-radius: 16px;
   padding: 32px;
@@ -56,8 +92,8 @@ body {
   gap: 10px;
 
   z-index: 1;
-}
-@media (max-width: 1199px) and (min-width: 768px) {
+} */
+/* @media (max-width: 1199px) and (min-width: 768px) {
   .home-question-button {
     position: absolute;
     top: 45px;
@@ -103,4 +139,4 @@ body {
 
     z-index: 1;
   }
-}
+} */

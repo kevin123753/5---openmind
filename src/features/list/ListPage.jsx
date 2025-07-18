@@ -40,7 +40,7 @@ function QuestionListPage() {
   };
 
   const navigate = useNavigate();
-  const subjectId = getItem("mySubjectId");
+  // const subjectId = getItem("mySubjectId");
 
   const handleLoad = async () => {
     try {
@@ -66,13 +66,13 @@ function QuestionListPage() {
     setCurrentPage(1);
   };
 
-  const handleClick = () => {
-    if (!subjectId) {
-      navigate("/");
-    } else {
-      navigate(`/post/${subjectId}/answer`);
-    }
-  };
+  // const handleClick = () => {
+  //   if (!subjectId) {
+  //     navigate("/");
+  //   } else {
+  //     navigate(`/post/${subjectId}/answer`);
+  //   }
+  // };
 
   const handleCardClick = (subject) => {
     if (!subject.id) {
@@ -91,7 +91,7 @@ function QuestionListPage() {
   return (
     <div className={styles["list-page"]}>
       <div className={styles["list-content"]}>
-        <div className={styles["top-row"]}>
+        {/* <div className={styles["top-row"]}>
           <Link to="/" className={styles["logo-link"]}>
             <img src={openmindLogo} alt="메인페이지 가기" className={styles["list-logo"]} />
           </Link>
@@ -100,7 +100,7 @@ function QuestionListPage() {
               답변 하러가기
             </Button>
           </div>
-        </div>
+        </div> */}
 
         <div className={styles["bottom-row"]}>
           <h2 className={styles["list-topic"]}>누구에게 질문할까요?</h2>

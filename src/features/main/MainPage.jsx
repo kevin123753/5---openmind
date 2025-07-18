@@ -17,9 +17,9 @@ function MainPage() {
   const navigate = useNavigate();
   const size = useResponsiveSize();
 
-  const handleClick = () => {
-    navigate("/list");
-  };
+  // const handleClick = () => {
+  //   navigate("/list");
+  // };
   const handleChange = (e) => {
     setName(e.target.value);
   };
@@ -30,17 +30,17 @@ function MainPage() {
   };
 
   return (
-    <div className={styles["home-page"]}>
-      <img src={openmindLogo} alt="OpenMind 로고" className={styles["home-logo"]} />
+    <div className={styles.homePage}>
+      <img src={openmindLogo} alt="OpenMind 로고" className={styles.logo} />
 
-      <img src={homeBackLogo} className={styles["home-back-logo"]} alt="OpenMind 배경이미지" />
+      {/* <img src={homeBackLogo} className={styles["home-back-logo"]} alt="OpenMind 배경이미지" />
 
       <div className={styles["home-question-button"]}>
         <Button variant="outline" size={size} rightIcon={<ArrowRightIcon />} onClick={handleClick}>
           질문하러 가기
         </Button>
-      </div>
-      <form className={styles["home-form"]} onSubmit={handleSubmit}>
+      </div>  */}
+      <form className={styles.homeForm} onSubmit={handleSubmit}>
         <Input
           placeholder="이름을 입력하세요"
           size={size}
