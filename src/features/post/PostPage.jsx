@@ -121,14 +121,6 @@ const PostPage = () => {
             : `아직 질문이 없습니다`}
         </h3>
         {queList.length ? (
-          // <<<<<<< HEAD
-          //           <QuestionList
-          //             data={queList}
-          //             img={img}
-          //             userName={userName}
-          //             dayjs={dayjs}
-          //           />
-          // =======
           <QuestionList
             data={queList}
             img={img}
@@ -137,7 +129,6 @@ const PostPage = () => {
             handleClick={handleClick}
           />
         ) : (
-          // >>>>>>> origin/feature/한유선/post-page
           <NoQuestion />
         )}
       </div>
