@@ -1,4 +1,15 @@
-.modalContainer {
+@media (max-width: 1024px) {
+  .modalContent {
+    width: 48rem; /* Tablet 기준 너비 */
+    padding: 3.2rem 2.4rem 6rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .modalContent {
+    width: calc(100% - 3.2rem); /* 모바일: 양쪽 여백 1.6rem */
+    padding: 3.2rem 1.6rem 6rem;
+  }
 }
 
 .dimmBg {
