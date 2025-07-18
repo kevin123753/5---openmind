@@ -1,12 +1,12 @@
 import Badge from "../../components/Badge/Badge";
-import Reaction from "../../components/Reaction/Reaction";
+// import Reaction from "../../components/Reaction/Reaction";
 import AnswerList from "../post/AnswerList";
 
-const QuestionList = ({ data, img, userName, dayjs }) => {
+const QuestionList = ({ data, img, userName, dayjs, handleClick }) => {
   return (
     <>
       {data.map((item) => (
-        <div className="items shadow-1" key={item.id}>
+        <div className="items shadow-1" key={item.id} onClick={() => handleClick(item.id)}>
           <Badge badgeActive={item.answer !== null} />
           <div className="titleContent">
             <p className="subTitle">
@@ -16,7 +16,7 @@ const QuestionList = ({ data, img, userName, dayjs }) => {
           </div>
           {item.answer && <AnswerList item={item} img={img} userName={userName} />}
           <div className="likeContent">
-            <Reaction like={item.like} dislike={item.dislike} />
+            {/* <Reaction like={item.like} dislike={item.dislike} questionId={item.id} /> */}
           </div>
         </div>
       ))}
