@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "./index.css";
 import "./app.css";
 import "./style/global.css";
@@ -11,9 +11,6 @@ import PostPage from "./features/post/PostPage";
 import AnswerPage from "./features/answer/AnswerPage";
 
 function App() {
-  const { pathname } = useLocation();
-  console.log(pathname);
-
   return (
     <>
       <div className="wrap">

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { createQuestion } from "../../features/post/postService";
+import { createQuestion } from "../postService";
 
-import styles from "./Modal.module.css";
-import Input from "../Input/Input";
-import Button from "../Button/Button";
-import CloseIcon from "../Icon/modalCloseIcon";
+import styles from "../../../components/Modal/Modal.module.css";
+import Input from "../../../components/Input/Input";
+import Button from "../../../components/Button/Button";
+import CloseIcon from "../../../components/Icon/modalCloseIcon";
 
 const Modal = ({ setModal, id, setQueList, img, userName }) => {
   const [question, setQuestion] = useState("");

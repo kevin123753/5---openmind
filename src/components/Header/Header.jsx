@@ -19,7 +19,6 @@ const Header = () => {
     }
   };
 
-  console.log(pathname);
   return (
     <header className="header">
       {pathname !== "/" ? (

@@ -1,6 +1,6 @@
-import Badge from "../../components/Badge/Badge";
+import Badge from "../../../components/Badge/Badge";
 // import Reaction from "../../components/Reaction/Reaction";
-import AnswerList from "../post/AnswerList";
+import AnswerList from "./AnswerList";
 
 const QuestionList = ({ data, img, userName, dayjs, handleClick }) => {
   return (
@@ -15,9 +15,9 @@ const QuestionList = ({ data, img, userName, dayjs, handleClick }) => {
             <p className="title">{item.content}</p>
           </div>
           {item.answer && <AnswerList item={item} img={img} userName={userName} />}
-          <div className="likeContent">
-            {/* <Reaction like={item.like} dislike={item.dislike} questionId={item.id} /> */}
-          </div>
+          {/* <div className="likeContent">
+            <Reaction like={item.like} dislike={item.dislike} questionId={item.id} />
+          </div> */}
         </div>
       ))}
     </>

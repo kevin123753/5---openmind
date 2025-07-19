@@ -1,0 +1,9 @@
+.toast {
+  position: fixed;
+  bottom: 49rem;
+  padding: 1.2rem 2rem;
+  border-radius: 0.8rem;
+  background-color: var(--gray-color-60);
+  color: var(--gray-color-10);
+  font-size: var(--font-caption-1);
+}

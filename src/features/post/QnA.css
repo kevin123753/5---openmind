@@ -120,7 +120,7 @@
 
 .queBtn {
   align-self: flex-end;
-  position: sticky;
+  position: fixed;
   bottom: 2.4rem;
 }
 
