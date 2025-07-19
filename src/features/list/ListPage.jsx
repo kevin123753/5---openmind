@@ -16,7 +16,6 @@ function QuestionListPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [sort, setSort] = useState("name");
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(null);
   const [count, setCount] = useState(0); // totalCount → count
@@ -67,8 +66,6 @@ function QuestionListPage() {
     handleLoad();
   }, [currentPage, sort]);
 
-  const handleSortChange = (value) => {
-    setSort(value);
   const handleSortChange = (value) => {
     setSort(value);
     setCurrentPage(1);
@@ -190,5 +187,4 @@ function QuestionListPage() {
     </div>
   );
 }
-
 export default QuestionListPage;

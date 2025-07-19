@@ -1,11 +1,6 @@
 import { createSubject } from "../../api/subjectApi";
 import { setItem } from "../../utils/localStorage";
-export async function createSubjectAndNavigate(
-  name,
-  navigate,
-  setError,
-  setLoading
-) {
+export async function createSubjectAndNavigate(name, navigate, setError, setLoading) {
   if (!name.trim()) return;
   if (localStorage.getItem("userCreated")) {
     alert("이미 계정을 생성하셨습니다.");

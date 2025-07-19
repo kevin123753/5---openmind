@@ -26,7 +26,7 @@ const ProfileContents = ({ img, userName }) => {
         <Button variant="round" size="xsmall" className="styleKakao" leftIcon={<Kakao />} />
         <Button variant="round" size="xsmall" className="styleFacebook" leftIcon={<Facebook />} />
       </div>
-      {toast && <Toast />}
+      {toast && <Toast message="URL이 복사되었습니다" />}
     </div>
   );
 };
