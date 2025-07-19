@@ -6,7 +6,7 @@ import AnswerForm from "./AnswerForm";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
-import styles from "./AnswerPage.module.css";
+// import styles from "./AnswerPage.module.css";
 import Button from "../../components/Button/Button";
 import Link from "../../components/Icon/LinkIcon";
 import Kakao from "../../components/Icon/KakaoIcon";

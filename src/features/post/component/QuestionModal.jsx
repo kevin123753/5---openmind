@@ -31,13 +31,17 @@ const Modal = ({ setModal, id, setQueList, img, userName }) => {
     <div className={`${styles.modalContainer} ${styles.dimmBg}`}>
       <div className={styles.modalContent}>
         <div className={styles.header}>
-          <h3>질문을 작성하세요</h3>
+          <div className={styles.titleWithIcon}>
+            <Messages className={styles.icon} />
+            <h3 className={styles.question}>질문을 작성하세요</h3>
+          </div>
           <Button leftIcon={<CloseIcon />} onClick={() => setModal(false)}></Button>
         </div>
         <form onSubmit={handleSubmit}>
           <p className={styles.title}>
+            To.
             <img src={img} alt="사용자프로필 사진" />
-            To.<span>{userName}</span>
+            <span>{userName}</span>
           </p>
           <Input
             type="textarea"

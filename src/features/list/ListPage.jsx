@@ -16,6 +16,7 @@ function QuestionListPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [sort, setSort] = useState("name");
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(null);
   const [count, setCount] = useState(0); // totalCount → count
@@ -68,7 +69,10 @@ function QuestionListPage() {
 
   const handleSortChange = (value) => {
     setSort(value);
+  const handleSortChange = (value) => {
+    setSort(value);
     setCurrentPage(1);
+    setDropdownOpen(false);
     setDropdownOpen(false);
   };
 
@@ -103,8 +107,19 @@ function QuestionListPage() {
               alt="메인페이지 가기"
               className={styles["list-logo"]}
             />
+            <img
+              src={openmindLogo}
+              alt="메인페이지 가기"
+              className={styles["list-logo"]}
+            />
           </Link>
           <div className={styles["list-answer-button"]}>
+            <Button
+              variant="outline"
+              size={size}
+              rightIcon={<ArrowRightIcon />}
+              onClick={handleClick}
+            >
             <Button
               variant="outline"
               size={size}

@@ -1,7 +1,7 @@
 import styles from "./Toast.module.css";
 
-const Toast = () => {
-  return <p className={`${styles.toast} shadow-3`}>URL이 복사되었습니다</p>;
+const Toast = ({ message }) => {
+  return <div className={styles.toast}>{message}</div>;
 };
 
 export default Toast;
