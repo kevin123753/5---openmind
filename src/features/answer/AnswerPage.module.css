@@ -142,7 +142,6 @@
 }
 
 /****** 반응형 ******/
-
 @media (max-width: 767px) {
   .container {
     width: 100%;

@@ -1,13 +1,13 @@
 import styles from "./MainPage.module.css";
-import homeBackLogo from "../../assets/homeBackLogo.png";
+// import homeBackLogo from "../../assets/homeBackLogo.png";
 import openmindLogo from "../../assets/openmindLogo.png";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
-import PersonIcon from "../../components/icon/PersonIcon";
+import PersonIcon from "../../components/Icon/PersonIcon";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { createSubjectAndNavigate } from "./mainService";
-import ArrowRightIcon from "../../components/icon/ArrowRightIcon";
+// import ArrowRightIcon from "../../components/Icon/ArrowRightIcon";
 import useResponsiveSize from "../../hooks/useResponsiveSize";
 
 function MainPage() {

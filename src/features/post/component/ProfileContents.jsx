@@ -1,22 +1,21 @@
-import { useLocation } from "react-router-dom";
-import usePostUserInfo from "../hook/usePostUserInfo";
+/****** hook ******/
 import useCopyUrlToast from "../hook/useCopyUrlToast";
 
-import Link from "../../components/Icon/LinkIcon";
-import Kakao from "../../components/Icon/KakaoIcon";
-import Facebook from "../../components/Icon/FacebookIcon";
-import Toast from "../../components/Toast/Toast";
+/****** component ******/
+import Button from "../../../components/Button/Button";
+import Link from "../../../components/Icon/LinkIcon";
+import Kakao from "../../../components/Icon/KakaoIcon";
+import Facebook from "../../../components/Icon/FacebookIcon";
+import Toast from "../../../components/Toast/Toast";
 
-//  링크 복사
-const handleUrlCopy = () => {
-  const url = window.location.origin + location.pathname;
-  copyUrl(url);
-};
-
-const profileContents = () => {
-  const location = useLocation();
-  const { userId, userName, img } = usePostUserInfo({ id, name, imageSource });
+const ProfileContents = ({ img, userName }) => {
   const { toast, copyUrl } = useCopyUrlToast();
+
+  //  링크 복사
+  const handleUrlCopy = () => {
+    const url = window.location.origin + location.pathname;
+    copyUrl(url);
+  };
 
   return (
     <div className="profileContents">
@@ -32,4 +31,4 @@ const profileContents = () => {
   );
 };
 
-export default profileContents;
+export default ProfileContents;
