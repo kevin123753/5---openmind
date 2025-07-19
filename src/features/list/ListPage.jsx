@@ -6,6 +6,8 @@ import { useNavigate, Link } from "react-router-dom";
 import styles from "./ListPage.module.css";
 import openmindLogo from "../../assets/openmindLogo.png";
 import ArrowRightIcon from "../../components/icon/ArrowRightIcon";
+import ArrowDownIcon from "../../components/Icon/ArrowDownIcon.jsx";
+import ArrowUpIcon from "../../components/Icon/ArrowUpIcon.jsx";
 import useResponsiveSize from "../../hooks/useResponsiveSize";
 import { getSubject } from "../../api/subjectApi";
 
@@ -13,6 +15,7 @@ function QuestionListPage() {
   const [subjects, setSubjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [sort, setSort] = useState("name");
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(null);
   const [count, setCount] = useState(0); // totalCount → count
@@ -25,7 +28,12 @@ function QuestionListPage() {
   const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);
   const size = useResponsiveSize();
 
-  const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+  const pageNumbers = Array.from(
+    { length: endPage - startPage + 1 },
+    (_, i) => startPage + i
+  );
+
+  const toggleDropdown = () => setDropdownOpen((prev) => !prev);
 
   const handlePrevGroup = () => {
     if (startPage > 1) {
@@ -61,9 +69,10 @@ function QuestionListPage() {
     handleLoad();
   }, [currentPage, sort]);
 
-  const handleSortChange = (e) => {
-    setSort(e.target.value);
+  const handleSortChange = (value) => {
+    setSort(value);
     setCurrentPage(1);
+    setDropdownOpen(false);
   };
 
   const handleClick = () => {
@@ -93,10 +102,19 @@ function QuestionListPage() {
       <div className={styles["list-content"]}>
         <div className={styles["top-row"]}>
           <Link to="/" className={styles["logo-link"]}>
-            <img src={openmindLogo} alt="메인페이지 가기" className={styles["list-logo"]} />
+            <img
+              src={openmindLogo}
+              alt="메인페이지 가기"
+              className={styles["list-logo"]}
+            />
           </Link>
           <div className={styles["list-answer-button"]}>
-            <Button variant="outline" size={size} rightIcon={<ArrowRightIcon />} onClick={handleClick}>
+            <Button
+              variant="outline"
+              size={size}
+              rightIcon={<ArrowRightIcon />}
+              onClick={handleClick}
+            >
               답변 하러가기
             </Button>
           </div>
@@ -104,12 +122,39 @@ function QuestionListPage() {
 
         <div className={styles["bottom-row"]}>
           <h2 className={styles["list-topic"]}>누구에게 질문할까요?</h2>
+
           <div className={styles["sort-wrapper"]}>
-            <label htmlFor="list">이름순</label>
-            <select id="list" value={sort} onChange={handleSortChange} className={styles["list-dropout"]}>
-              <option value="name">이름순</option>
-              <option value="time">최신순</option>
-            </select>
+            <button
+              type="button"
+              onClick={toggleDropdown}
+              className={`${styles["dropdown-button"]} ${
+                isDropdownOpen ? styles["active-border"] : ""
+              }`}
+            >
+              {sort === "name" ? "이름순" : "최신순"}{" "}
+              {isDropdownOpen ? (
+                <ArrowUpIcon className={styles.icon} />
+              ) : (
+                <ArrowDownIcon className={styles.icon} />
+              )}
+            </button>
+
+            {isDropdownOpen && (
+              <ul className={`${styles["dropdown-list"]} shadow-1`}>
+                <li
+                  className={sort === "name" ? styles["selected"] : ""}
+                  onClick={() => handleSortChange("name")}
+                >
+                  이름순
+                </li>
+                <li
+                  className={sort === "time" ? styles["selected"] : ""}
+                  onClick={() => handleSortChange("time")}
+                >
+                  최신순
+                </li>
+              </ul>
+            )}
           </div>
         </div>
 
@@ -137,7 +182,8 @@ function QuestionListPage() {
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
-              className={currentPage === page ? styles["active"] : ""}>
+              className={currentPage === page ? styles["active"] : ""}
+            >
               {page}
             </button>
           ))}
