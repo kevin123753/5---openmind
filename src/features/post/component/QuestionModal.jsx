@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { createQuestion } from "../../features/post/postService";
+import { createQuestion } from "../postService";
 
-import styles from "./Modal.module.css";
-import Input from "../Input/Input";
-import Button from "../Button/Button";
-import CloseIcon from "../Icon/modalCloseIcon";
-import Messages from "../Icon/Messages";
+import styles from "../../../components/Modal/Modal.module.css";
+import Input from "../../../components/Input/Input";
+import Button from "../../../components/Button/Button";
+import CloseIcon from "../../../components/Icon/modalCloseIcon";
+import Messages from "../../../components/Icon/Messages";
 
 const Modal = ({ setModal, id, setQueList, img, userName }) => {
   const [question, setQuestion] = useState("");
@@ -36,10 +36,7 @@ const Modal = ({ setModal, id, setQueList, img, userName }) => {
             <Messages className={styles.icon} />
             <h3 className={styles.question}>질문을 작성하세요</h3>
           </div>
-          <Button
-            leftIcon={<CloseIcon />}
-            onClick={() => setModal(false)}
-          ></Button>
+          <Button leftIcon={<CloseIcon />} onClick={() => setModal(false)}></Button>
         </div>
         <form onSubmit={handleSubmit}>
           <p className={styles.title}>
@@ -56,12 +53,7 @@ const Modal = ({ setModal, id, setQueList, img, userName }) => {
             onChange={(e) => setQuestion(e.target.value)}
             style={{ height: "20rem" }}
           />
-          <Button
-            variant="primary"
-            size="large"
-            className={styles.submitBtn}
-            disabled={!question.trim()}
-          >
+          <Button variant="primary" size="large" className={styles.submitBtn} disabled={!question.trim()}>
             질문 보내기
           </Button>
         </form>

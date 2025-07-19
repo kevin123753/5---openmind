@@ -1,93 +1,207 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { getQuestions } from "../post/postService";
-
-// dayjs 라이브러리
+import { putAnswer } from "../../api/answerApi";
+import AnswerForm from "./AnswerForm";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
-
-dayjs.extend(relativeTime);
-dayjs.locale("ko");
-
-// css
-import "../post/QnA.css";
-// component
+import styles from "./AnswerPage.module.css";
 import Button from "../../components/Button/Button";
 import Link from "../../components/Icon/LinkIcon";
 import Kakao from "../../components/Icon/KakaoIcon";
 import Facebook from "../../components/Icon/FacebookIcon";
 import MessagesIcon from "../../components/Icon/MessagesIcon";
-import QuestionList from "../post/QuestionList";
-import NoQuestion from "../post/NoQuestion";
+import NoQuestion from "../post/component/NoQuestion";
+
+dayjs.extend(relativeTime);
+dayjs.locale("ko");
 
 const AnswerPage = () => {
-  //현재 url 받아오기
+  const { id: subjectId } = useParams();
   const location = useLocation();
+  const [subject, setSubject] = useState({ name: "", imageSource: "" });
+  const [questions, setQuestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [openMenuId, setOpenMenuId] = useState(null);
+  const [editingAnswerId, setEditingAnswerId] = useState(null);
 
-  // listPage에서 현재 상태 받아옴
-  const { id, name, imageSource } = location.state || {};
-  // 현재상태 저장
-  const [userName, setUserName] = useState(name || "");
-  const [userId, setUserId] = useState(id || "");
-  const [img, setImg] = useState(imageSource || "");
+  const handleDeleteAll = async () => {
+    if (!window.confirm("모든 질문을 삭제하시겠습니까?")) return;
 
-  // 질문 저장
-  const [queList, setQueList] = useState([]);
+    try {
+      await deleteAllQuestionsBySubject(subjectId);
+      alert("질문이 모두 삭제되었습니다.");
+      handleQuestionLoad();
+    } catch (err) {
+      alert(err.message || "삭제 중 오류 발생");
+    }
+  };
+
+  const handleQuestionLoad = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const data = await getQuestions(subjectId);
+      const validQuestions = data.results || [];
+      setQuestions(validQuestions);
+    } catch (error) {
+      setError(error.message || "질문을 불러오지 못했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const toggleMenu = (id) => {
+    setOpenMenuId((prev) => (prev === id ? null : id));
+  };
+
+  const handleEdit = (answer) => {
+    setEditingAnswerId(answer.id);
+  };
+
+  const handleReject = async (answerId) => {
+    if (!window.confirm("정말 답변을 거절하시겠습니까?")) return;
+    try {
+      const updatedQuestions = [...questions];
+      const index = updatedQuestions.findIndex((q) => q.answer?.id === answerId);
+      if (index === -1) return;
+
+      const updatedAnswer = {
+        ...updatedQuestions[index].answer,
+        content: "답변 거절",
+        isRejected: true,
+      };
+
+      await putAnswer(answerId, updatedAnswer);
+
+      updatedQuestions[index] = {
+        ...updatedQuestions[index],
+        answer: updatedAnswer,
+      };
+
+      setQuestions(updatedQuestions);
+    } catch (error) {
+      alert("거절 실패: " + error.message);
+    }
+  };
+
+  const handleUpdateSuccess = (updatedAnswer) => {
+    const index = questions.findIndex((q) => q.answer?.id === updatedAnswer.id);
+    if (index !== -1) {
+      const updatedQuestions = [...questions];
+      updatedQuestions[index] = {
+        ...updatedQuestions[index],
+        answer: updatedAnswer,
+      };
+      setQuestions(updatedQuestions);
+    }
+    setEditingAnswerId(null);
+  };
 
   useEffect(() => {
-    if (!userId) {
-      const storedName = localStorage.getItem("name");
-      const storedId = localStorage.getItem("mySubjectId");
-      const storedImg = localStorage.getItem("imageSource");
+    if (!subjectId) return;
+    handleQuestionLoad();
+  }, [subjectId]);
 
-      if (storedId) {
-        setUserName(storedName || "");
-        setUserId(storedId);
-        setImg(storedImg || "");
-      }
+  useEffect(() => {
+    if (location.state) {
+      const { name, imageSource } = location.state;
+      setSubject({ name, imageSource });
+      localStorage.setItem("name", name);
+      localStorage.setItem("imageSource", imageSource);
+    } else {
+      setSubject({
+        name: localStorage.getItem("name") || "",
+        imageSource: localStorage.getItem("imageSource") || "",
+      });
     }
   }, []);
 
-  useEffect(() => {
-    if (!userId) return;
-
-    const fetchQuestions = async () => {
-      try {
-        const data = await getQuestions(userId);
-        if (Array.isArray(data.results)) {
-          setQueList(data.results);
-        } else {
-          console.error("질문 리스트 오류", data);
-        }
-      } catch (err) {
-        console.error("질문 에러", err);
-      }
-    };
-
-    fetchQuestions();
-  }, [userId]);
-
   return (
-    <div className="inner qAPage">
-      <div className="profileContents">
-        <img src={img} alt="큰 프로필" />
-        <h2>{userName}</h2>
-        <div className="BtnContents">
-          <Button variant="round" size="xsmall" className="styleLink" leftIcon={<Link />} />
-          <Button variant="round" size="xsmall" className="styleKakao" leftIcon={<Kakao />} />
-          <Button variant="round" size="xsmall" className="styleFacebook" leftIcon={<Facebook />} />
+    <div className={styles["answer-page"]}>
+      <div className={styles["profile-section"]}>
+        <img src={subject.imageSource} alt="프로필 이미지" className={styles["profile-image"]} />
+        <h2 className={styles["profile-name"]}>{subject.name}</h2>
+
+        <div className={styles["share-buttons"]}>
+          <Button variant="round" size="xsmall" className={styles["link-button"]} leftIcon={<Link />} />
+          <Button variant="round" size="xsmall" className={styles["kakao-button"]} leftIcon={<Kakao />} />
+          <Button variant="round" size="xsmall" className={styles["facebook-button"]} leftIcon={<Facebook />} />
         </div>
       </div>
-      <Button variant="round" size="medium" className="removeBtn">
-        삭제하기
+
+      <Button variant="default" size="small" onClick={handleDeleteAll} className={styles["delete-button"]}>
+        삭제 하기
       </Button>
-      <div className="container">
-        <h3>
+
+      <div className={styles["question-section"]}>
+        <h3 className={styles["question-count"]}>
           <MessagesIcon />
-          {queList.length ? `${queList.length}개의 질문이 있습니다` : `아직 질문이 없습니다`}
+          {questions.length ? `${questions.length}개의 질문이 있습니다` : `아직 질문이 없습니다`}
         </h3>
-        {queList.length ? <QuestionList data={queList} img={img} userName={userName} dayjs={dayjs} /> : <NoQuestion />}
+
+        <div className={styles["question-list"]}>
+          {isLoading ? (
+            <p className={styles["loading-text"]}>로딩 중...</p>
+          ) : questions.length === 0 ? (
+            <NoQuestion />
+          ) : (
+            questions.map((question) => {
+              const answer = question.answer;
+              if (answer?.isRejected) return null;
+
+              const isEditing = editingAnswerId === answer?.id;
+
+              return (
+                <div key={question.id} className={styles["question-card"]}>
+                  <div className={styles["question-meta"]}>
+                    <div className={`${styles["badge"]} ${answer ? styles["answered"] : styles["unanswered"]}`}>
+                      {answer ? "답변완료" : "미답변"}
+                    </div>
+
+                    <button onClick={() => toggleMenu(question.id)} className={styles["menu-button"]}>
+                      ⋮
+                    </button>
+
+                    {openMenuId === question.id && (
+                      <ul className={styles["dropdown-menu"]}>
+                        {answer && (
+                          <>
+                            <li className={styles["dropdown-item"]} onClick={() => handleEdit(answer)}>
+                              수정하기
+                            </li>
+                            <li className={styles["dropdown-item"]} onClick={() => handleReject(answer.id)}>
+                              답변 거절
+                            </li>
+                          </>
+                        )}
+                      </ul>
+                    )}
+
+                    <span className={styles["timestamp"]}>질문 · {dayjs(question.createdAt).fromNow()}</span>
+                  </div>
+
+                  <p className={styles["question-content"]}>{question.content}</p>
+
+                  <AnswerForm
+                    question={question}
+                    subject={subject}
+                    isEditing={isEditing}
+                    initialContent={answer?.content || ""}
+                    onSuccess={handleUpdateSuccess}
+                    onCancel={() => setEditingAnswerId(null)}
+                  />
+
+                  <div className={styles["reaction"]}>
+                    👍좋아요 {question.like} 👎싫어요 {question.dislike}
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
       </div>
     </div>
   );

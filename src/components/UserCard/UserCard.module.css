@@ -8,7 +8,7 @@
 .cardGrid {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(18.6rem, 1fr));
   gap: 2rem;
   box-sizing: border-box;
 }
@@ -20,18 +20,18 @@
 }
 
 .userCard {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 100%;
+  width: 100%; */
   /* min-width: 18.6rem; */
-  max-width: 25rem;
-  height: auto;
+  /* max-width: 25rem; */
+  /* height: auto; */
   padding: 2.4rem;
   border-radius: 1.6rem;
   border: 0.1rem solid var(--gray-color-40);
   background-color: var(--gray-color-10);
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
 }
 
 .profileImg {
