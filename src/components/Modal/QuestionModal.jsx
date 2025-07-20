@@ -54,7 +54,8 @@ const Modal = ({ setModal, id, setQueList, img, userName }) => {
             placeholder="질문을 입력해주세요"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            style={{ height: "20rem" }}
+            className={styles.modalTextarea}
+            // style={{ fontSize: "1.6rem" }}
           />
           <Button
             variant="primary"
