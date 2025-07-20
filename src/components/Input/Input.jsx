@@ -8,13 +8,15 @@ const Input = ({
   size = "medium",
   type = "input", // "input" | "textarea"
   disabled = false,
+  value = "",
+  onChange,
+  className = "",
   ...rest
 }) => {
   const [focused, setFocused] = useState(false);
-  const [value, setValue] = useState("");
 
   const isTextarea = type === "textarea";
-  const isFilled = value.trim() !== "";
+  const isFilled = value?.trim() !== "";
 
   const wrapperClass = `
     ${styles.wrapper}
@@ -32,22 +34,22 @@ const Input = ({
       {!isTextarea && icon && <span className={styles.icon}>{icon}</span>}
       {isTextarea ? (
         <textarea
-          className={styles.input}
+          className={`${styles.input} ${className}`}
           placeholder={placeholder}
           disabled={disabled}
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={onChange}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           {...rest}
         />
       ) : (
         <input
-          className={styles.input}
+          className={`${styles.input} ${className}`}
           placeholder={placeholder}
           disabled={disabled}
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={onChange}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           {...rest}
