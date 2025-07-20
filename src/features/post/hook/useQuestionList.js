@@ -11,7 +11,7 @@ const useQuestionList = (userId) => {
     const fetchQuestions = async () => {
       try {
         const data = await getQuestions(userId);
-        console.log(data);
+
         if (Array.isArray(data.results)) {
           setQueList(data.results);
         } else {
