@@ -158,6 +158,9 @@
     width: 3.2rem;
     height: 3.2rem;
   }
+  .queBtn {
+    padding: 1.4rem 2.4rem;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 1199px) {
