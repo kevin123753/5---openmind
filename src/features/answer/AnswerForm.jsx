@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
 import { postAnswer, putAnswer } from "../../api/answerApi";
 import styles from "./AnswerForm.module.css";
-export default function AnswerForm({ question, subject, isEditing, initialContent, onSuccess, onCancel }) {
+export default function AnswerForm({
+  question,
+  subject,
+  isEditing,
+  initialContent,
+  onSuccess,
+  onCancel,
+}) {
   const [content, setContent] = useState(initialContent || "");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -49,7 +56,11 @@ export default function AnswerForm({ question, subject, isEditing, initialConten
   return (
     <form onSubmit={handleSubmit} className={styles["answer-form"]}>
       <label className={styles["form-label"]}>
-        <img src={subject.imageSource} alt="프로필" className={styles["form-profile-image"]} />
+        <img
+          src={subject.imageSource}
+          alt="프로필"
+          className={styles["form-profile-image"]}
+        />
         {subject.name}
       </label>
 
@@ -61,12 +72,20 @@ export default function AnswerForm({ question, subject, isEditing, initialConten
       />
 
       <div className={styles["form-footer"]}>
-        <button type="submit" disabled={isLoading || !content.trim()} className={styles["submit-button"]}>
+        <button
+          type="submit"
+          disabled={isLoading || !content.trim()}
+          className={styles["submit-button"]}
+        >
           {isEditing ? "수정 완료" : "답변 완료"}
         </button>
 
         {isEditing && (
-          <button type="button" onClick={onCancel} className={styles["cancel-button"]}>
+          <button
+            type="button"
+            onClick={onCancel}
+            className={styles["cancel-button"]}
+          >
             취소
           </button>
         )}

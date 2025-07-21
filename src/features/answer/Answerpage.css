@@ -1,5 +1,6 @@
 .wrap:has(.qAPage) {
-  background: var(--gray-color-20) url(/image/post/topBg.jpg) no-repeat top center;
+  background: var(--gray-color-20) url(/image/post/topBg.jpg) no-repeat top
+    center;
 }
 .inner {
   display: flex;
@@ -142,11 +143,23 @@
 }
 
 /****** 반응형 ******/
+
 @media (max-width: 767px) {
   .container {
     width: 100%;
   }
   .qAPage .removeBtn {
+    padding: 1.4rem 2.4rem;
+  }
+  .profileContents img {
+    width: 10.4rem;
+    height: 10.4rem;
+  }
+  .questionContent img {
+    width: 3.2rem;
+    height: 3.2rem;
+  }
+  .queBtn {
     padding: 1.4rem 2.4rem;
   }
 }

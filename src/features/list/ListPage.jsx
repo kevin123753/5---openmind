@@ -28,7 +28,10 @@ function QuestionListPage() {
   const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);
   const size = useResponsiveSize();
 
-  const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+  const pageNumbers = Array.from(
+    { length: endPage - startPage + 1 },
+    (_, i) => startPage + i
+  );
 
   const toggleDropdown = () => setDropdownOpen((prev) => !prev);
 
@@ -134,17 +137,30 @@ function QuestionListPage() {
           <button
             type="button"
             onClick={toggleDropdown}
-            className={`${styles.dropdownButton} ${isDropdownOpen ? styles.activeBorder : ""}`}>
+            className={`${styles.dropdownButton} ${
+              isDropdownOpen ? styles.activeBorder : ""
+            }`}
+          >
             {sort === "name" ? "이름순" : "최신순"}{" "}
-            {isDropdownOpen ? <ArrowUpIcon className={styles.icon} /> : <ArrowDownIcon className={styles.icon} />}
+            {isDropdownOpen ? (
+              <ArrowUpIcon className={styles.icon} />
+            ) : (
+              <ArrowDownIcon className={styles.icon} />
+            )}
           </button>
 
           {isDropdownOpen && (
             <ul className={`${styles.dropdownList} shadow-1`}>
-              <li className={sort === "name" ? styles["selected"] : ""} onClick={() => handleSortChange("name")}>
+              <li
+                className={sort === "name" ? styles["selected"] : ""}
+                onClick={() => handleSortChange("name")}
+              >
                 이름순
               </li>
-              <li className={sort === "time" ? styles["selected"] : ""} onClick={() => handleSortChange("time")}>
+              <li
+                className={sort === "time" ? styles["selected"] : ""}
+                onClick={() => handleSortChange("time")}
+              >
                 최신순
               </li>
             </ul>
@@ -173,7 +189,11 @@ function QuestionListPage() {
         </button>
 
         {pageNumbers.map((page) => (
-          <button key={page} onClick={() => setCurrentPage(page)} className={currentPage === page ? styles.active : ""}>
+          <button
+            key={page}
+            onClick={() => setCurrentPage(page)}
+            className={currentPage === page ? styles.active : ""}
+          >
             {page}
           </button>
         ))}
