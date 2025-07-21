@@ -1,6 +1,6 @@
 .toast {
   position: fixed;
-  bottom: 49rem;
+  top: 38rem;
   padding: 1.2rem 2rem;
   border-radius: 0.8rem;
   background-color: var(--gray-color-60);

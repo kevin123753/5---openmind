@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { setItem } from "../../utils/localStorage";
 
 /****** hook ******/
+import useResponsiveSize from "../../hooks/useResponsiveSize";
 import usePostUserInfo from "./hook/usePostUserInfo";
 import useInfiniteScroll from "./hook/useInifiniteScroll";
 
@@ -33,6 +34,8 @@ import Modal from "./component/QuestionModal";
 const PostPage = () => {
   const observerRef = useRef(null);
   const location = useLocation();
+
+  const size = useResponsiveSize();
 
   // 모달창 상태
   const [modal, setModal] = useState(false);
@@ -102,7 +105,7 @@ const PostPage = () => {
         {totalCount ? <QuestionList {...questionListProps} /> : <NoQuestion />}
       </div>
       <Button variant="round" size="large" className="shadow-2 queBtn" onClick={() => setModal(!modal)}>
-        질문 작성하기
+        {size !== "small" ? "질문 작성하기" : "질문 작성"}
       </Button>
       {modal && <Modal {...modalProps} />}
     </div>

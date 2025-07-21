@@ -13,12 +13,6 @@
   box-sizing: border-box;
 }
 
-@media screen and (max-width: 520px) {
-  .cardGrid {
-    grid-template-columns: repeat(2, 1fr); /* 무조건 2단 이상 */
-  }
-}
-
 .userCard {
   /* display: flex;
   flex-direction: column;
@@ -67,4 +61,10 @@
 
 .answerRight {
   font-size: clamp(1.4rem, 2vw, 1.6rem);
+}
+
+@media screen and (max-width: 520px) {
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr); /* 무조건 2단 이상 */
+  }
 }
