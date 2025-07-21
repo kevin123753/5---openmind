@@ -21,15 +21,15 @@ const useInifiniteScroll = (subjectId, limit = 8) => {
         const data = await getQuestions(subjectId, limit, offset);
         console.log(data);
         setQueList((prev) => {
-          const existingIds = new Set(prev.map((q) => q.id));
-          const newItems = data.results.filter((q) => !existingIds.has(q.id));
+          const existingIds = new Set(prev.map((item) => item.id));
+          const newItems = data.results.filter((item) => !existingIds.has(item.id));
           return [...prev, ...newItems];
         });
         setTotalCount(data.count);
         loadedPagesRef.current.add(currentPage);
         setHasNextPage(data.results.length === limit);
       } catch (error) {
-        console.error("무한스크롤 에러:", error);
+        console.error("무한스크롤 에러", error);
       } finally {
         setLoading(false);
       }
@@ -53,9 +53,9 @@ const useInifiniteScroll = (subjectId, limit = 8) => {
     queList,
     loading,
     hasNextPage,
+    totalCount,
     loadMore,
     setQueList,
-    totalCount,
   };
 };
 
