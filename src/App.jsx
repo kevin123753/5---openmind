@@ -21,7 +21,10 @@ function App() {
             <Route path="/list" element={<QuestionListPage />} />
             <Route path="/post/:id" element={<PostPage />} />
             <Route path="/post/:questionId/answer" element={<AnswerPage />} />
-            <Route path="*" element={<div>404 - 페이지를 찾을 수 없습니다</div>} />
+            <Route
+              path="*"
+              element={<div>404 - 페이지를 찾을 수 없습니다</div>}
+            />
           </Routes>
         </main>
       </div>
