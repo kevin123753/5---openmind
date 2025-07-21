@@ -4,8 +4,10 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 
 const kakaoKey = import.meta.env.VITE_KAKAO_JS_KEY;
+
 if (window.Kakao && !window.Kakao.isInitialized()) {
   window.Kakao.init(kakaoKey);
+  console.log("✅ Kakao SDK Initialized:", kakaoKey);
 }
 
 createRoot(document.getElementById("root")).render(

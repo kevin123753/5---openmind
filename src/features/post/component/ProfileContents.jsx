@@ -65,32 +65,45 @@ const ProfileContents = ({ img, userName }) => {
   };
 
   const handleKakaoShare = () => {
-    if (!window.Kakao || !window.Kakao.isInitialized()) {
-      alert("카카오톡 공유를 사용할 수 없습니다.");
+    console.log("🔔 handleKakaoShare called");
+
+    if (!window.Kakao) {
+      console.warn("❌ Kakao SDK not loaded");
       return;
     }
+
+    if (!window.Kakao.isInitialized()) {
+      const kakaoKey = import.meta.env.VITE_KAKAO_JS_KEY;
+      window.Kakao.init(kakaoKey);
+      console.log("✅ SDK 지연 초기화됨");
+    }
+
+    const shareUrl = window.location.href;
+
+    console.log("🔗 Sharing URL:", shareUrl);
 
     window.Kakao.Link.sendDefault({
       objectType: "feed",
       content: {
-        title: `${userName}에게 질문하기`,
-        description: "OpenMind에서 질문을 남겨보세요!",
-        imageUrl: img || "https://openmind.dev/default-thumbnail.jpg",
+        title: "OpenMind에서 질문을 남겨보세요!",
+        description: "링크로 접속해 바로 질문할 수 있어요.",
+        imageUrl: "https://openmind.dev/default-thumbnail.jpg", // HTTPS 이미지
         link: {
-          mobileWebUrl: url,
-          webUrl: url,
+          mobileWebUrl: shareUrl,
+          webUrl: shareUrl,
         },
       },
       buttons: [
         {
           title: "질문 보러가기",
           link: {
-            mobileWebUrl: url,
-            webUrl: url,
+            mobileWebUrl: shareUrl,
+            webUrl: shareUrl,
           },
         },
       ],
     });
+    console.log("✅ Kakao.Link.sendDefault executed");
   };
 
   return (
