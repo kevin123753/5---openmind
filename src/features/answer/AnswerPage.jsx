@@ -6,7 +6,7 @@ import { deleteAllQuestionsBySubject } from "../../api/answerApi";
 import { setItem, getItem } from "../../utils/localStorage";
 
 /****** hook ******/
-import useInfiniteScroll from "../../hooks/useInifiniteScroll";
+import useQuestionList from "../../hooks/useQuestionList";
 
 /****** dayjs 라이브러리 ******/
 import dayjs from "dayjs";
@@ -45,9 +45,11 @@ const AnswerPage = () => {
     }
   }, [id, name, imageSource]);
 
-  // 무한스크롤 훅 사용
-  const { queList, loading, hasNextPage, loadMore, refetch, setQueList } = useInfiniteScroll(subjectId);
-
+  // 리스트 받아옴
+  const { queList, setQueList } = useQuestionList(subjectId);
+  if (!subjectId) {
+    return null;
+  }
   const handleClick = async (questionId) => {
     try {
       const question = queList.find((item) => item.id === questionId);
@@ -58,24 +60,6 @@ const AnswerPage = () => {
     }
   };
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && hasNextPage && !loading) {
-          loadMore();
-        }
-      },
-      { threshold: 1 }
-    );
-
-    const target = observerRef.current;
-    if (target) observer.observe(target);
-
-    return () => {
-      if (target) observer.unobserve(target);
-    };
-  }, [hasNextPage, loading, loadMore]);
-
   const handleDeleteAll = async () => {
     if (!window.confirm("모든 질문을 삭제하시겠습니까?")) return;
 
@@ -84,7 +68,6 @@ const AnswerPage = () => {
       await deleteAllQuestionsBySubject(subjectId);
       setQueList([]); // 🔄 질문 리스트 초기화
       window.scrollTo(0, 0); // 🔄 스크롤 최상단 이동으로 옵저버 재발동 유도
-      await refetch();
       alert("질문이 모두 삭제되었습니다.");
     } catch (err) {
       console.error("질문 삭제 실패", err);

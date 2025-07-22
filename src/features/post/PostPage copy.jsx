@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 /****** utils ******/
@@ -7,7 +7,6 @@ import { setItem } from "../../utils/localStorage";
 /****** hook ******/
 import useResponsiveSize from "../../hooks/useResponsiveSize";
 import usePostUserInfo from "../../hooks/usePostUserInfo";
-import useQuestionList from "../../hooks/useQuestionList";
 
 /****** dayjs 라이브러리 ******/
 import dayjs from "dayjs";
@@ -32,6 +31,7 @@ import NoQuestion from "./component/NoQuestion";
 import Modal from "./component/QuestionModal";
 
 const PostPage = () => {
+  const observerRef = useRef(null);
   const location = useLocation();
 
   const size = useResponsiveSize();
@@ -44,10 +44,7 @@ const PostPage = () => {
 
   // hook에서 변수 받아옴
   const { userId, userName, img } = usePostUserInfo({ id, name, imageSource });
-  const { queList, setQueList } = useQuestionList(userId);
-  if (!userId) {
-    return null;
-  }
+  const { queList, loading, hasNextPage, loadMore, setQueList, totalCount } = useInfiniteScroll(userId);
 
   // 질문 클릭했을때 해당 아이디 questionId라는 이름으로 저장!
   const handleClick = async (questionId) => {
@@ -59,6 +56,23 @@ const PostPage = () => {
       console.error("질문 조회 실패", err.message);
     }
   };
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && hasNextPage && !loading) {
+          loadMore();
+        }
+      },
+      { threshold: 1 }
+    );
+
+    const target = observerRef.current;
+    if (target) observer.observe(target);
+
+    return () => {
+      if (target) observer.unobserve(target);
+    };
+  }, [hasNextPage, loading, loadMore]);
 
   /****** props ******/
   const questionListProps = {
@@ -66,6 +80,7 @@ const PostPage = () => {
     img,
     userName,
     dayjs,
+    observerRef,
     handleClick,
   };
 

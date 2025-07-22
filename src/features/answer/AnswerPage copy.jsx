@@ -7,7 +7,6 @@ import { putAnswer, deleteAllQuestionsBySubject } from "../../api/answerApi";
 import { getSubjectById } from "../../api/subjectApi";
 
 // 훅
-import useInfiniteScroll from "../post/hook/useInifiniteScroll";
 
 // 컴포넌트
 import ProfileContents from "../post/component/ProfileContents";
@@ -39,12 +38,7 @@ const AnswerPage = () => {
   const [openMenuId, setOpenMenuId] = useState(null);
 
   // 무한스크롤 훅
-  const {
-    queList: questions,
-    setQueList: setQuestions,
-    loading: isLoading,
-    loadMore,
-  } = useInfiniteScroll(subjectId);
+  const { queList: questions, setQueList: setQuestions, loading: isLoading, loadMore } = useInfiniteScroll(subjectId);
 
   // 답변 취소 함수
   const handleCancelEdit = () => {
@@ -175,11 +169,7 @@ const AnswerPage = () => {
 
   return (
     <div className="qAPage">
-      <ProfileContents
-        img={subject.imageSource}
-        userName={subject.name}
-        location={location}
-      />
+      <ProfileContents img={subject.imageSource} userName={subject.name} location={location} />
 
       <div className="container">
         <h3 className="questionCount">

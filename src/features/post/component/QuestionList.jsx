@@ -2,7 +2,7 @@ import Badge from "../../../components/Badge/Badge";
 import Reaction from "../../../components/Reaction/Reaction";
 import AnswerList from "./AnswerList";
 
-const QuestionList = ({ data, img, userName, dayjs, observerRef, handleClick }) => {
+const QuestionList = ({ data, img, userName, dayjs, handleClick }) => {
   return (
     <>
       {data.map((item) => (
@@ -20,7 +20,6 @@ const QuestionList = ({ data, img, userName, dayjs, observerRef, handleClick }) 
               <Reaction like={item.like} dislike={item.dislike} questionId={item.id} />
             </div>
           </div>
-          <div ref={observerRef} style={{ height: "1px" }}></div>
         </>
       ))}
     </>

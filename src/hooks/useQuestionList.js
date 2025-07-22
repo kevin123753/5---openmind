@@ -2,16 +2,14 @@ import { useEffect, useState } from "react";
 import { getQuestions } from "../features/post/postService";
 
 const useQuestionList = (userId) => {
-  // 질문 저장
   const [queList, setQueList] = useState([]);
-  // 질문 목록 불러오기
+
   useEffect(() => {
     if (!userId) return;
 
     const fetchQuestions = async () => {
       try {
-        const data = await getQuestions(userId);
-
+        const data = await getQuestions(userId, 10000, 0); // userId는 문자열이어야 함
         if (Array.isArray(data.results)) {
           setQueList(data.results);
         } else {
@@ -24,6 +22,7 @@ const useQuestionList = (userId) => {
 
     fetchQuestions();
   }, [userId]);
+
   return { queList, setQueList };
 };
 
