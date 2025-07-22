@@ -26,16 +26,23 @@ export async function putAnswer(answerId, { content, isRejected }) {
   if (!res.ok) throw new Error("답변 수정 실패");
   return res.json();
 }
+
 export async function deleteAllQuestionsBySubject(subjectId) {
   try {
-    const res = await fetch(`${BASE_URL}/subjects/${subjectId}/questions`);
+    const res = await fetch(`${BASE_URL}/subjects/${subjectId}/questions/`);
     const data = await res.json();
     const questionList = data.results || [];
 
     for (const q of questionList) {
-      await fetch(`${BASE_URL}/questions/${q.id}/`, {
+      const delRes = await fetch(`${BASE_URL}/questions/${q.id}/`, {
         method: "DELETE",
       });
+
+      if (!delRes.ok) {
+        console.error(`질문 삭제 실패: ID=${q.id}`);
+      } else {
+        console.log(`질문 삭제 성공: ID=${q.id}`);
+      }
     }
   } catch (err) {
     throw new Error("전체 질문 삭제 실패: " + err.message);
