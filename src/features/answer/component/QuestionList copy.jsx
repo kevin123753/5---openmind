@@ -35,10 +35,17 @@ const QuestionList = ({
         const isRejected = answer?.isRejected;
 
         // ✅ 수정: AnswerPage + 답변이 없거나 + content가 비었거나 + 수정 중일 때만 AnswerForm
-        const showAnswerForm = isAnswerPage && (!hasAnswer || !answer?.content || isEditing) && !isRejected;
+        const showAnswerForm =
+          isAnswerPage &&
+          (!hasAnswer || !answer?.content || isEditing) &&
+          !isRejected;
 
         return (
-          <div className="items shadow-1" key={item.id} onClick={() => handleClick(item.id)}>
+          <div
+            className="items shadow-1"
+            key={item.id}
+            onClick={() => handleClick(item.id)}
+          >
             <div className="qnaTop">
               <Badge badgeActive={hasAnswer && !isRejected} />
               <Button rightIcon={<MoreIcon />} />
@@ -63,22 +70,33 @@ const QuestionList = ({
             ) : (
               <>
                 {/* ✅ 변경: answer가 있고 isRejected가 false일 때만 AnswerList 렌더링 */}
-                {hasAnswer && !isRejected && <AnswerList item={item} img={img} userName={userName} />}
+                {hasAnswer && !isRejected && (
+                  <AnswerList item={item} img={img} userName={userName} />
+                )}
 
                 {/* ✅ 케밥 메뉴 조건부 렌더링 */}
                 {editable && (
                   <div className={styles["menu-wrapper"]}>
-                    <button onClick={() => toggleMenu(item.id)} className={styles["menu-button"]}>
+                    <button
+                      onClick={() => toggleMenu(item.id)}
+                      className={styles["menu-button"]}
+                    >
                       ⋮
                     </button>
 
                     {/* ✅ 변경: answer가 존재하고 isRejected가 false일 때만 드롭다운 표시 */}
                     {openMenuId === item.id && hasAnswer && !isRejected && (
                       <ul className={styles["dropdown-menu"]}>
-                        <li className={styles["dropdown-item"]} onClick={() => onEdit(answer)}>
+                        <li
+                          className={styles["dropdown-item"]}
+                          onClick={() => onEdit(answer)}
+                        >
                           수정하기
                         </li>
-                        <li className={styles["dropdown-item"]} onClick={() => handleReject(answer.id)}>
+                        <li
+                          className={styles["dropdown-item"]}
+                          onClick={() => handleReject(answer.id)}
+                        >
                           답변 거절
                         </li>
                       </ul>
