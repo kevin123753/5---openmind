@@ -45,7 +45,8 @@ const PostPage = () => {
 
   // hook에서 변수 받아옴
   const { userId, userName, img } = usePostUserInfo({ id, name, imageSource });
-  const { queList, loading, hasNextPage, loadMore, setQueList, totalCount } = useInfiniteScroll(userId);
+  const { queList, loading, hasNextPage, loadMore, setQueList, totalCount } =
+    useInfiniteScroll(userId);
 
   // 질문 클릭했을때 해당 아이디 questionId라는 이름으로 저장!
   const handleClick = async (questionId) => {
@@ -100,11 +101,18 @@ const PostPage = () => {
       <div className="container">
         <h3>
           <MessagesIcon />
-          {totalCount ? `${totalCount}개의 질문이 있습니다` : `아직 질문이 없습니다`}
+          {totalCount
+            ? `${totalCount}개의 질문이 있습니다`
+            : `아직 질문이 없습니다`}
         </h3>
         {totalCount ? <QuestionList {...questionListProps} /> : <NoQuestion />}
       </div>
-      <Button variant="round" size="large" className="shadow-2 queBtn" onClick={() => setModal(!modal)}>
+      <Button
+        variant="round"
+        size="large"
+        className="shadow-2 queBtn"
+        onClick={() => setModal(!modal)}
+      >
         {size !== "small" ? "질문 작성하기" : "질문 작성"}
       </Button>
       {modal && <Modal {...modalProps} />}

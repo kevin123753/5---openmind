@@ -1,207 +1,216 @@
-import { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
-import { getQuestions } from "../post/postService";
-import { putAnswer } from "../../api/answerApi";
-import AnswerForm from "./AnswerForm";
+// React 및 라우터
+import { useEffect, useState, useRef } from "react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+
+// API
+import { putAnswer, deleteAllQuestionsBySubject } from "../../api/answerApi";
+import { getSubjectById } from "../../api/subjectApi";
+
+// 훅
+import useInfiniteScroll from "../post/hook/useInifiniteScroll";
+
+// 컴포넌트
+import ProfileContents from "../post/component/ProfileContents";
+import NoQuestion from "../post/component/NoQuestion";
+import QuestionList from "../post/component/QuestionList";
+
+// 스타일
+import "./AnswerPage.css";
+
+// 아이콘
+import MessagesIcon from "../../components/Icon/MessagesIcon";
+
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
-import styles from "./AnswerPage.module.css";
-import Button from "../../components/Button/Button";
-import Link from "../../components/Icon/LinkIcon";
-import Kakao from "../../components/Icon/KakaoIcon";
-import Facebook from "../../components/Icon/FacebookIcon";
-import MessagesIcon from "../../components/Icon/MessagesIcon";
-import NoQuestion from "../post/component/NoQuestion";
 
+// dayjs 설정
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
 
 const AnswerPage = () => {
-  const { id: subjectId } = useParams();
+  const { id: subjectId } = useParams(); // 주소로부터 subjectId 확보
   const location = useLocation();
-  const [subject, setSubject] = useState({ name: "", imageSource: "" });
-  const [questions, setQuestions] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [openMenuId, setOpenMenuId] = useState(null);
-  const [editingAnswerId, setEditingAnswerId] = useState(null);
+  const navigate = useNavigate();
 
+  // 상태 관리
+  const [subject, setSubject] = useState({ name: "", imageSource: "" });
+  const [editingAnswerId, setEditingAnswerId] = useState(null);
+  const [openMenuId, setOpenMenuId] = useState(null);
+
+  // 무한스크롤 훅
+  const {
+    queList: questions,
+    setQueList: setQuestions,
+    loading: isLoading,
+    loadMore,
+  } = useInfiniteScroll(subjectId);
+
+  // 답변 취소 함수
+  const handleCancelEdit = () => {
+    setEditingAnswerId(null); // 편집 모드 종료
+  };
+
+  // subject 정보 가져오기 (주소로부터 또는 API 호출)
+  useEffect(() => {
+    const state = location.state;
+
+    // 상태로 전달된 경우 (navigate() 통해 접근)
+    if (state?.name && state?.imageSource) {
+      setSubject({ name: state.name, imageSource: state.imageSource });
+      localStorage.setItem("name", state.name);
+      localStorage.setItem("imageSource", state.imageSource);
+    } else {
+      // 직접 접근 또는 새로고침 시 fallback API 호출
+      getSubjectById(subjectId)
+        .then((res) => {
+          setSubject({ name: res.name, imageSource: res.imageSource });
+          localStorage.setItem("name", res.name);
+          localStorage.setItem("imageSource", res.imageSource);
+        })
+        .catch((err) => {
+          console.error("API 실패: ", err);
+          alert("잘못된 접근입니다.");
+          navigate("/"); // 잘못된 접근 시 홈으로 리디렉션
+        });
+    }
+  }, [subjectId, location.state, navigate]);
+
+  // 질문 삭제 함수
   const handleDeleteAll = async () => {
     if (!window.confirm("모든 질문을 삭제하시겠습니까?")) return;
 
     try {
       await deleteAllQuestionsBySubject(subjectId);
       alert("질문이 모두 삭제되었습니다.");
-      handleQuestionLoad();
+      setQuestions([]); // 질문 리스트 초기화
     } catch (err) {
+      console.error("질문 삭제 실패", err);
       alert(err.message || "삭제 중 오류 발생");
     }
   };
 
-  const handleQuestionLoad = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const data = await getQuestions(subjectId);
-      const validQuestions = data.results || [];
-      setQuestions(validQuestions);
-    } catch (error) {
-      setError(error.message || "질문을 불러오지 못했습니다.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  // 메뉴 토글 함수
   const toggleMenu = (id) => {
-    setOpenMenuId((prev) => (prev === id ? null : id));
+    setOpenMenuId((prev) => (prev === id ? null : id)); // 현재 메뉴가 열려 있으면 닫고, 아니면 열기
   };
 
+  // 답변 수정 시작 함수
   const handleEdit = (answer) => {
     setEditingAnswerId(answer.id);
   };
 
+  // 답변 거절 함수
   const handleReject = async (answerId) => {
     if (!window.confirm("정말 답변을 거절하시겠습니까?")) return;
+
     try {
-      const updatedQuestions = [...questions];
-      const index = updatedQuestions.findIndex((q) => q.answer?.id === answerId);
-      if (index === -1) return;
+      const index = questions.findIndex((q) => q.answer?.id === answerId);
+      if (index === -1) return; // 해당 답변이 없으면 종료
 
       const updatedAnswer = {
-        ...updatedQuestions[index].answer,
+        ...questions[index].answer,
         content: "답변 거절",
         isRejected: true,
       };
-
       await putAnswer(answerId, updatedAnswer);
 
-      updatedQuestions[index] = {
-        ...updatedQuestions[index],
-        answer: updatedAnswer,
-      };
-
-      setQuestions(updatedQuestions);
+      const newQuestions = [...questions];
+      newQuestions[index] = { ...newQuestions[index], answer: updatedAnswer };
+      setQuestions(newQuestions); // 질문 리스트 업데이트
     } catch (error) {
-      alert("거절 실패: " + error.message);
+      console.error("답변 거절 실패", error);
+      alert("거절 실패: " + (error.message || "알 수 없는 오류"));
     }
   };
 
-  const handleUpdateSuccess = (updatedAnswer) => {
-    const index = questions.findIndex((q) => q.answer?.id === updatedAnswer.id);
-    if (index !== -1) {
-      const updatedQuestions = [...questions];
-      updatedQuestions[index] = {
-        ...updatedQuestions[index],
-        answer: updatedAnswer,
-      };
-      setQuestions(updatedQuestions);
-    }
-    setEditingAnswerId(null);
-  };
-
+  // 무한스크롤 옵저버 설정
+  const observerRef = useRef(null);
   useEffect(() => {
-    if (!subjectId) return;
-    handleQuestionLoad();
-  }, [subjectId]);
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) loadMore(); // 페이지 끝에 도달하면 추가 로드
+    });
 
+    if (observerRef.current) observer.observe(observerRef.current);
+    return () => {
+      if (observerRef.current) observer.unobserve(observerRef.current); // 정리
+    };
+  }, [loadMore]);
   useEffect(() => {
-    if (location.state) {
-      const { name, imageSource } = location.state;
-      setSubject({ name, imageSource });
-      localStorage.setItem("name", name);
-      localStorage.setItem("imageSource", imageSource);
-    } else {
-      setSubject({
-        name: localStorage.getItem("name") || "",
-        imageSource: localStorage.getItem("imageSource") || "",
-      });
-    }
+    setQuestions([
+      {
+        id: 1,
+        content: "질문입니다.",
+        createdAt: "2025-07-22",
+        answer: {
+          id: 10,
+          content: "답변 내용입니다.",
+          isRejected: false,
+        },
+      },
+      {
+        id: 2,
+        content: "두 번째 질문입니다.",
+        createdAt: "2025-07-20",
+        answer: null,
+      },
+      {
+        id: 1,
+        content: "질문입니다.",
+        createdAt: "2025-07-22",
+        answer: {
+          id: 6,
+          content: "답변 내용입니다.",
+          isRejected: false,
+        },
+      },
+      {
+        id: 18,
+        content: "두 번째 질문입니다.",
+        createdAt: "2025-07-20",
+        answer: null,
+      },
+    ]);
   }, []);
 
   return (
-    <div className={styles["answer-page"]}>
-      <div className={styles["profile-section"]}>
-        <img src={subject.imageSource} alt="프로필 이미지" className={styles["profile-image"]} />
-        <h2 className={styles["profile-name"]}>{subject.name}</h2>
+    <div className="qAPage">
+      <ProfileContents
+        img={subject.imageSource}
+        userName={subject.name}
+        location={location}
+      />
 
-        <div className={styles["share-buttons"]}>
-          <Button variant="round" size="xsmall" className={styles["link-button"]} leftIcon={<Link />} />
-          <Button variant="round" size="xsmall" className={styles["kakao-button"]} leftIcon={<Kakao />} />
-          <Button variant="round" size="xsmall" className={styles["facebook-button"]} leftIcon={<Facebook />} />
-        </div>
-      </div>
-
-      <Button variant="default" size="small" onClick={handleDeleteAll} className={styles["delete-button"]}>
-        삭제 하기
-      </Button>
-
-      <div className={styles["question-section"]}>
-        <h3 className={styles["question-count"]}>
+      <div className="container">
+        <h3 className="questionCount">
           <MessagesIcon />
-          {questions.length ? `${questions.length}개의 질문이 있습니다` : `아직 질문이 없습니다`}
+          {Array.isArray(questions) && questions.length > 0
+            ? `${questions.length}개의 질문이 있습니다`
+            : "아직 질문이 없습니다"}
         </h3>
 
-        <div className={styles["question-list"]}>
-          {isLoading ? (
-            <p className={styles["loading-text"]}>로딩 중...</p>
-          ) : questions.length === 0 ? (
-            <NoQuestion />
-          ) : (
-            questions.map((question) => {
-              const answer = question.answer;
-              if (answer?.isRejected) return null;
-
-              const isEditing = editingAnswerId === answer?.id;
-
-              return (
-                <div key={question.id} className={styles["question-card"]}>
-                  <div className={styles["question-meta"]}>
-                    <div className={`${styles["badge"]} ${answer ? styles["answered"] : styles["unanswered"]}`}>
-                      {answer ? "답변완료" : "미답변"}
-                    </div>
-
-                    <button onClick={() => toggleMenu(question.id)} className={styles["menu-button"]}>
-                      ⋮
-                    </button>
-
-                    {openMenuId === question.id && (
-                      <ul className={styles["dropdown-menu"]}>
-                        {answer && (
-                          <>
-                            <li className={styles["dropdown-item"]} onClick={() => handleEdit(answer)}>
-                              수정하기
-                            </li>
-                            <li className={styles["dropdown-item"]} onClick={() => handleReject(answer.id)}>
-                              답변 거절
-                            </li>
-                          </>
-                        )}
-                      </ul>
-                    )}
-
-                    <span className={styles["timestamp"]}>질문 · {dayjs(question.createdAt).fromNow()}</span>
-                  </div>
-
-                  <p className={styles["question-content"]}>{question.content}</p>
-
-                  <AnswerForm
-                    question={question}
-                    subject={subject}
-                    isEditing={isEditing}
-                    initialContent={answer?.content || ""}
-                    onSuccess={handleUpdateSuccess}
-                    onCancel={() => setEditingAnswerId(null)}
-                  />
-
-                  <div className={styles["reaction"]}>
-                    👍좋아요 {question.like} 👎싫어요 {question.dislike}
-                  </div>
-                </div>
-              );
-            })
-          )}
+        <div className="list-content">
+          {/* ✅ QuestionList 컴포넌트로 교체 */}
+          <QuestionList
+            data={questions.filter((q) => !q.answer?.isRejected)} // ✅ 거절 제외
+            img={subject.imageSource}
+            userName={subject.name}
+            dayjs={dayjs}
+            observerRef={observerRef}
+            isAnswerPage={true} // ✅ AnswerPage용 플래그
+            editable={true} // ✅ 케밥 메뉴 표시
+            editingAnswerId={editingAnswerId}
+            onEdit={handleEdit}
+            onCancelEdit={handleCancelEdit}
+            subject={subject}
+            openMenuId={openMenuId}
+            toggleMenu={toggleMenu}
+            handleReject={handleReject}
+          />
         </div>
+
+        {isLoading && <p className="loadingText">로딩 중...</p>}
+        {!questions.length && !isLoading && <NoQuestion />}
       </div>
     </div>
   );
