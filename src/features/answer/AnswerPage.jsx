@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { setItem, getItem } from "../../utils/localStorage";
 
 /****** hook ******/
+import usePostUserInfo from "../../hooks/usePostUserInfo";
 import useInfiniteScroll from "../../hooks/useInifiniteScroll";
 
 /****** dayjs 라이브러리 ******/

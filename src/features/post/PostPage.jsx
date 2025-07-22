@@ -93,7 +93,6 @@ const PostPage = () => {
     setModal,
     setQueList,
   };
-
   return (
     <div className="inner qAPage">
       <ProfileContents img={img} userName={userName} location={location} />

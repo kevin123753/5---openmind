@@ -36,18 +36,3 @@ export async function deleteQuestion(questionId) {
 
   if (!res.ok) throw new Error("질문 삭제 실패");
 }
-
-// POST /questions/{questionId}/reaction/
-export async function postReaction(questionId, reaction) {
-  const res = await fetch(`${BASE_URL}/questions/${questionId}/reaction/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ type: reaction }),
-  });
-
-  if (!res.ok) throw new Error("리액션 실패");
-
-  return await res.json();
-}

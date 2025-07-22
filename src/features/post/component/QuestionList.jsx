@@ -16,9 +16,9 @@ const QuestionList = ({ data, img, userName, dayjs, observerRef, handleClick }) 
               <p className="title">{item.content}</p>
             </div>
             {item.answer && <AnswerList item={item} img={img} userName={userName} />}
-            {/* <div className="likeContent">
+            <div className="likeContent">
               <Reaction like={item.like} dislike={item.dislike} questionId={item.id} />
-            </div> */}
+            </div>
           </div>
           <div ref={observerRef} style={{ height: "1px" }}></div>
         </>

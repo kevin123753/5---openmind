@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { handleReaction } from "../../utils/reactionUtils";
 import { getQuestionListId } from "../../features/post/postService";
-import { getItem } from "../../utils/localStorage";
+import { getItem, setItem } from "../../utils/localStorage";
 import styles from "./Reaction.module.css";
 import ThumbsUp from "../Icon/ThumbsUp";
 import ThumbsDown from "../Icon/ThumbsDown";
@@ -11,6 +11,7 @@ const Reaction = ({ like, dislike, questionId, disabled }) => {
   const [dislikeCount, setDislikeCount] = useState(dislike);
   const [reactState, setReactState] = useState(null);
 
+  // ✅ 초기 반응 상태 확인
   useEffect(() => {
     const reacted = getItem("reactedQuestions") || [];
     if (reacted.includes(`like-${questionId}`)) {
@@ -20,12 +21,20 @@ const Reaction = ({ like, dislike, questionId, disabled }) => {
     }
   }, [questionId]);
 
+  // ✅ 좋아요 or 싫어요 클릭
   const reactionEvent = async (type) => {
-    const result = await handleReaction(questionId, type);
-    if (!result) return;
+    if (reactState) return; // 이미 반응한 경우 차단
 
-    setReactState(type);
+    const success = await handleReaction(questionId, type);
+    if (!success) return;
 
+    setReactState(type); // UI 즉시 반영
+
+    // ✅ 로컬스토리지 기록 저장
+    const reacted = getItem("reactedQuestions") || [];
+    setItem("reactedQuestions", [...reacted, `${type}-${questionId}`]);
+
+    // ✅ 최신 수치 불러오기
     try {
       const updated = await getQuestionListId(questionId);
       setLikeCount(updated.like);
