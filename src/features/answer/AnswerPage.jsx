@@ -2,10 +2,9 @@ import { useRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 /****** utils ******/
-import { setItem } from "../../utils/localStorage";
+import { setItem, getItem } from "../../utils/localStorage";
 
 /****** hook ******/
-import usePostUserInfo from "../../hooks/usePostUserInfo";
 import useInfiniteScroll from "../../hooks/useInifiniteScroll";
 
 /****** dayjs 라이브러리 ******/
@@ -33,14 +32,24 @@ const AnswerPage = () => {
   const observerRef = useRef(null);
   const location = useLocation();
 
-  // 모달창 상태
-
-  // listPage에서 현재 상태 받아옴
+  // main에서 현재 상태 받아옴
   const { id, name, imageSource } = location.state || {};
 
+  // 메인에서 전달된값 로컬에 저장
+  useEffect(() => {
+    if (id && name) {
+      setItem("mySubjectId", id);
+      setItem("username", name);
+      setItem("userImage", imageSource);
+    }
+  }, [id, name, imageSource]);
+
+  const subjectId = getItem("mySubjectId");
+  const username = getItem("username");
+  const userImage = getItem("userImage");
+
   // hook에서 변수 받아옴
-  const { userId, userName, img } = usePostUserInfo({ id, name, imageSource });
-  const { queList, loading, hasNextPage, loadMore, totalCount } = useInfiniteScroll(userId);
+  const { queList, loading, hasNextPage, loadMore, totalCount } = useInfiniteScroll(subjectId);
 
   // 질문 클릭했을때 해당 아이디 questionId라는 이름으로 저장!
   const handleClick = async (questionId) => {
@@ -73,8 +82,6 @@ const AnswerPage = () => {
   /****** props ******/
   const questionListProps = {
     data: queList,
-    img,
-    userName,
     dayjs,
     observerRef,
     handleClick,
@@ -82,7 +89,7 @@ const AnswerPage = () => {
 
   return (
     <div className="inner qAPage">
-      <ProfileContents img={img} userName={userName} location={location} />
+      <ProfileContents img={userImage} userName={username} location={location} />
       <div className="answerBtnContents">
         <Button variant="round" size="small" className="shadow-2 removeBtn">
           삭제하기

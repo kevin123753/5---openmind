@@ -22,6 +22,7 @@ const Modal = ({ setModal, id, setQueList, img, userName }) => {
       const newQuestion = await createQuestion(id, question);
       setQueList((prev) => [newQuestion, ...prev]);
       setModal(false);
+      console.log("새로운질문", newQuestion);
     } catch (err) {
       alert("전송실패");
       console.error(err);
