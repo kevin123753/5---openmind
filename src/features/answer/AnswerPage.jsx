@@ -1,5 +1,6 @@
 import { useRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { deleteAllQuestionsBySubject } from "../../api/answerApi";
 
 /****** utils ******/
 import { setItem, getItem } from "../../utils/localStorage";
@@ -19,11 +20,8 @@ dayjs.locale("ko");
 import "../../style/QnA.css";
 
 /****** component ******/
-// 공통 컴포넌트
 import MessagesIcon from "../../components/Icon/MessagesIcon";
 import Button from "../../components/Button/Button";
-
-// 페이지 컴포넌트
 import ProfileContents from "./component/ProfileContents";
 import QuestionList from "./component/QuestionList";
 import NoQuestion from "./component/NoQuestion";
@@ -32,10 +30,13 @@ const AnswerPage = () => {
   const observerRef = useRef(null);
   const location = useLocation();
 
-  // main에서 현재 상태 받아옴
+  // 메인에서 전달된 상태 or localStorage에서 subject 정보 가져오기
   const { id, name, imageSource } = location.state || {};
+  const subjectId = id || getItem("mySubjectId");
+  const username = name || getItem("username");
+  const userImage = imageSource || getItem("userImage");
 
-  // 메인에서 전달된값 로컬에 저장
+  // 전달된 정보 localStorage 저장
   useEffect(() => {
     if (id && name) {
       setItem("mySubjectId", id);
@@ -44,14 +45,9 @@ const AnswerPage = () => {
     }
   }, [id, name, imageSource]);
 
-  const subjectId = getItem("mySubjectId");
-  const username = getItem("username");
-  const userImage = getItem("userImage");
+  // 무한스크롤 훅 사용
+  const { queList, loading, hasNextPage, loadMore, refetch, setQueList } = useInfiniteScroll(subjectId);
 
-  // hook에서 변수 받아옴
-  const { queList, loading, hasNextPage, loadMore, totalCount } = useInfiniteScroll(subjectId);
-
-  // 질문 클릭했을때 해당 아이디 questionId라는 이름으로 저장!
   const handleClick = async (questionId) => {
     try {
       const question = queList.find((item) => item.id === questionId);
@@ -61,6 +57,7 @@ const AnswerPage = () => {
       console.error("질문 조회 실패", err.message);
     }
   };
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -79,7 +76,22 @@ const AnswerPage = () => {
     };
   }, [hasNextPage, loading, loadMore]);
 
-  /****** props ******/
+  const handleDeleteAll = async () => {
+    if (!window.confirm("모든 질문을 삭제하시겠습니까?")) return;
+
+    try {
+      console.log("삭제 대상 subjectId:", subjectId);
+      await deleteAllQuestionsBySubject(subjectId);
+      setQueList([]); // 🔄 질문 리스트 초기화
+      window.scrollTo(0, 0); // 🔄 스크롤 최상단 이동으로 옵저버 재발동 유도
+      await refetch();
+      alert("질문이 모두 삭제되었습니다.");
+    } catch (err) {
+      console.error("질문 삭제 실패", err);
+      alert(err.message || "삭제 중 오류 발생");
+    }
+  };
+
   const questionListProps = {
     data: queList,
     dayjs,
@@ -91,16 +103,16 @@ const AnswerPage = () => {
     <div className="inner qAPage">
       <ProfileContents img={userImage} userName={username} location={location} />
       <div className="answerBtnContents">
-        <Button variant="round" size="small" className="shadow-2 removeBtn">
+        <Button variant="round" size="small" className="shadow-2 removeBtn" onClick={handleDeleteAll}>
           삭제하기
         </Button>
       </div>
       <div className="container">
         <h3>
           <MessagesIcon />
-          {totalCount ? `${totalCount}개의 질문이 있습니다` : `아직 질문이 없습니다`}
+          {queList.length > 0 ? `${queList.length}개의 질문이 있습니다` : "아직 질문이 없습니다"}
         </h3>
-        {totalCount ? <QuestionList {...questionListProps} /> : <NoQuestion />}
+        {queList.length > 0 ? <QuestionList {...questionListProps} /> : <NoQuestion />}
       </div>
     </div>
   );
