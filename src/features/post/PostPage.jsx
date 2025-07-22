@@ -6,8 +6,8 @@ import { setItem } from "../../utils/localStorage";
 
 /****** hook ******/
 import useResponsiveSize from "../../hooks/useResponsiveSize";
-import usePostUserInfo from "./hook/usePostUserInfo";
-import useInfiniteScroll from "./hook/useInifiniteScroll";
+import usePostUserInfo from "../../hooks/usePostUserInfo";
+import useInfiniteScroll from "../../hooks/useInifiniteScroll";
 
 /****** dayjs 라이브러리 ******/
 import dayjs from "dayjs";
@@ -18,7 +18,7 @@ dayjs.extend(relativeTime);
 dayjs.locale("ko");
 
 /****** css ******/
-import "./QnA.css";
+import "../../style/QnA.css";
 
 /****** component ******/
 // 공통 컴포넌트

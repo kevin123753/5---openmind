@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getQuestions } from "../postService";
+import { getQuestions } from "../features/post/postService";
 
 const useQuestionList = (userId) => {
   // 질문 저장

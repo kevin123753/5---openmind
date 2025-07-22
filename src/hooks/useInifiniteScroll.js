@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { getQuestions } from "../postService";
+import { getQuestions } from "../features/post/postService";
 
 const useInifiniteScroll = (subjectId, limit = 8) => {
   const [queList, setQueList] = useState([]);

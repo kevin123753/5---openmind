@@ -1,29 +1,15 @@
 import { useState, useEffect } from "react";
 import { handleReaction } from "../../utils/reactionUtils";
 import { getQuestionListId } from "../../features/post/postService";
-import { getItem } from "../../utils/localStorage"; // localStorage.getItem wrapper
+import { getItem } from "../../utils/localStorage";
 import styles from "./Reaction.module.css";
 import ThumbsUp from "../Icon/ThumbsUp";
 import ThumbsDown from "../Icon/ThumbsDown";
 
 const Reaction = ({ like, dislike, questionId, disabled }) => {
-  let [likeCount, setLikeCount] = useState(like);
-  let [dislikeCount, setDislikeCount] = useState(dislike);
-  let [reactState, setReactState] = useState(null);
-
-  useEffect(() => {
-    async function fetchLatest() {
-      try {
-        const updated = await getQuestionListId(questionId);
-        setLikeCount(updated.like);
-        setDislikeCount(updated.dislike);
-      } catch (e) {
-        console.error("리액션 최신값 가져오기 실패", e);
-      }
-    }
-
-    fetchLatest();
-  }, [questionId]);
+  const [likeCount, setLikeCount] = useState(like);
+  const [dislikeCount, setDislikeCount] = useState(dislike);
+  const [reactState, setReactState] = useState(null);
 
   useEffect(() => {
     const reacted = getItem("reactedQuestions") || [];
@@ -34,32 +20,35 @@ const Reaction = ({ like, dislike, questionId, disabled }) => {
     }
   }, [questionId]);
 
-  const reactionEvent = (type) => {
-    const result = handleReaction(questionId, type);
-    console.log(result);
+  const reactionEvent = async (type) => {
+    const result = await handleReaction(questionId, type);
     if (!result) return;
+
     setReactState(type);
 
-    if (type === "like") {
-      setLikeCount(likeCount + 1);
-    } else if (type === "dislike") {
-      setDislikeCount(dislikeCount + 1);
+    try {
+      const updated = await getQuestionListId(questionId);
+      setLikeCount(updated.like);
+      setDislikeCount(updated.dislike);
+    } catch (err) {
+      console.error("리액션 수치 업데이트 실패", err);
     }
   };
+
   return (
     <div className={styles.reactionContent}>
       <button
-        className={`${styles.item} ${reactState === "like" || likeCount !== 0 ? styles.like : ""}`}
+        className={`${styles.item} ${reactState === "like" ? styles.like : ""}`}
         onClick={() => reactionEvent("like")}
-        disabled={disabled}>
+        disabled={disabled || reactState !== null}>
         <ThumbsUp />
         좋아요
         <span>{likeCount}</span>
       </button>
       <button
-        className={`${styles.item} ${reactState === "dislike" || dislikeCount !== 0 ? styles.dislike : ""}`}
-        disabled={disabled}
-        onClick={() => reactionEvent("dislike")}>
+        className={`${styles.item} ${reactState === "dislike" ? styles.dislike : ""}`}
+        onClick={() => reactionEvent("dislike")}
+        disabled={disabled || reactState !== null}>
         <ThumbsDown />
         싫어요
         <span>{dislikeCount}</span>
