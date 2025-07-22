@@ -1,5 +1,7 @@
 import Badge from "../../../components/Badge/Badge";
+import Button from "../../../components/Button/Button";
 import Reaction from "../../../components/Reaction/Reaction";
+import MoreIcon from "../../../components/Icon/MoreIcon";
 import AnswerList from "./AnswerList";
 
 const QuestionList = ({ data, img, userName, dayjs, handleClick }) => {
@@ -9,6 +11,7 @@ const QuestionList = ({ data, img, userName, dayjs, handleClick }) => {
         <>
           <div className="items shadow-1" key={item.id} onClick={() => handleClick(item.id)}>
             <Badge badgeActive={item.answer !== null} />
+
             <div className="titleContent">
               <p className="subTitle">
                 질문<span>{dayjs(item.createdAt).fromNow()}</span>
