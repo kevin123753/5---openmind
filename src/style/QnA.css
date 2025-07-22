@@ -1,5 +1,6 @@
 .wrap:has(.qAPage) {
-  background: var(--gray-color-20) url(/image/post/topBg.jpg) no-repeat top center;
+  background: var(--gray-color-20) url(/image/post/topBg.jpg) no-repeat top
+    center;
 }
 .inner {
   display: flex;
@@ -20,12 +21,27 @@
   width: 100%;
 }
 
+.profileImageContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+
 .profileContents img {
   width: 13.6rem;
   height: 13.6rem;
-  margin-bottom: 1.2rem;
   border-radius: 50%;
+  object-fit: cover;
+  transition: all 0.2s ease;
 }
+
+.profileContents img:hover {
+  opacity: 0.8;
+  transform: scale(1.02);
+}
+
 .profileContents h2 {
   font-size: var(--font-h2);
   font-weight: 400;
@@ -114,8 +130,19 @@
   font-size: var(--font-caption-1);
 }
 
-.questionContent .rejected {
-  color: var(--red-color-50);
+.questionContent .rejectedText {
+  color: #dc3545;
+  font-weight: 500;
+}
+
+.questionContent button:disabled {
+  color: var(--gray-color-40);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.questionContent button:disabled:hover {
+  color: var(--gray-color-40);
 }
 
 .queBtn {
@@ -138,6 +165,38 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+}
+.qnaTop .kebabMenu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 3rem;
+  right: 0;
+  padding: 0.2rem 0;
+  border: 0.1rem solid var(--gray-color-30);
+  border-radius: 0.8rem;
+}
+.qnaTop .kebabMenu button {
+  gap: 0.8rem;
+  font-size: 1.4rem;
+  padding: 0.5rem 1.2rem;
+}
+.qnaTop .kebabMenu button:hover {
+  color: var(--blue-color-50);
+}
+.qnaTop .kebabMenu button:active {
+  background-color: var(--gray-color-20);
+  color: var(--gray-color-60);
+}
+.qnaTop .kebabMenu button:disabled {
+  color: var(--gray-color-40);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.qnaTop .kebabMenu button:disabled:hover {
+  color: var(--gray-color-40);
 }
 .answerBtnContents {
   width: 71.6rem;

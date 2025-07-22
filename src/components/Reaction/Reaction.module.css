@@ -11,20 +11,33 @@
   gap: 0.6rem;
   color: var(--gray-color-40);
   font-size: var(--font-caption-1);
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
+
+.item:hover {
+  opacity: 0.8;
+}
+
 .item span {
   display: none;
 }
 
 .like {
   color: var(--blue-color-50);
-}
-.dislike {
-  color: var(--gray-color-60);
+  font-weight: 500;
 }
 
-/* 좋아요 0이상이면 갯수 보이게 설정 */
-.like span,
-.dislike span {
+.like span {
   display: block;
+}
+
+.dislike {
+  color: var(--gray-color-60);
+  font-weight: 500;
+}
+
+/* 싫어요 수치는 항상 숨김 */
+.dislike span {
+  display: none;
 }

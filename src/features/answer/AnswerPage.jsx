@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react"; //✅케밥메뉴를 위한 state추가
+import { useRef, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { deleteAllQuestionsBySubject } from "../../api/answerApi";
 
@@ -29,45 +29,37 @@ import NoQuestion from "./component/NoQuestion";
 const AnswerPage = () => {
   const observerRef = useRef(null);
   const location = useLocation();
-  const [editingAnswerId, setEditingAnswerId] = useState(null); // ✅수정 중인 답변 ID
-  const [openMenuId, setOpenMenuId] = useState(null); // ✅열린 케밥 메뉴 대상
 
   // 메인에서 전달된 상태 or localStorage에서 subject 정보 가져오기
   const { id, name, imageSource } = location.state || {};
   const subjectId = id || getItem("mySubjectId");
   const username = name || getItem("username");
-  const userImage = imageSource || getItem("userImage");
 
-  //✅케밥 메뉴를 위한 추가
-  const toggleMenu = (questionId) => {
-    setOpenMenuId((prev) => (prev === questionId ? null : questionId));
-  };
-  const onEdit = (answer) => {
-    setEditingAnswerId(answer.id);
-    setOpenMenuId(null);
-  };
-  const onCancelEdit = () => {
-    setEditingAnswerId(null);
-  };
-  const handleReject = async (answerId) => {
-    try {
-      await putAnswer(answerId, { isRejected: true }); // API에 따라 다름
-      await refetch();
-    } catch (err) {
-      alert("답변 거절 실패");
+  // localStorage에서 subject 정보를 우선적으로 확인하여 userImage 상태 초기화
+  const subjectFromStorage = getItem("subject");
+  const [userImage, setUserImage] = useState(() => {
+    // localStorage의 subject.imageSource를 최우선으로 사용
+    if (subjectFromStorage?.imageSource) {
+      console.log(
+        "🔍 userImage 초기화: localStorage subject.imageSource 사용",
+        subjectFromStorage.imageSource
+      );
+      return subjectFromStorage.imageSource;
     }
-  };
-  useEffect(() => {
-    const handleClickOutside = () => {
-      setOpenMenuId(null);
-    };
+    // 그 다음 location.state의 imageSource
+    if (imageSource) {
+      console.log(
+        "🔍 userImage 초기화: location.state imageSource 사용",
+        imageSource
+      );
+      return imageSource;
+    }
+    // 마지막으로 개별 키
+    const fallbackImage = getItem("userImage");
+    console.log("🔍 userImage 초기화: 개별 키 사용", fallbackImage);
+    return fallbackImage;
+  });
 
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []); //메뉴 바깥 클릭 시 닫히는 기능
   // 전달된 정보 localStorage 저장
   useEffect(() => {
     if (id && name) {
@@ -78,10 +70,61 @@ const AnswerPage = () => {
   }, [id, name, imageSource]);
 
   // 리스트 받아옴
-  const { queList, setQueList } = useQuestionList(subjectId);
+  const { queList, setQueList, refetch } = useQuestionList(subjectId);
   if (!subjectId) {
     return null;
   }
+
+  // 데이터 업데이트 함수
+  const handleDataUpdate = (updatedData) => {
+    if (updatedData) {
+      // 즉시 UI 업데이트
+      setQueList(updatedData);
+    } else {
+      // 기존 방식: 데이터 다시 불러오기
+      refetch();
+    }
+  };
+
+  // 이미지 변경 핸들러
+  const handleImageChange = (newImageUrl) => {
+    console.log("🔄 이미지 변경 시작:", newImageUrl);
+
+    // userImage 상태 업데이트
+    setUserImage(newImageUrl);
+    console.log("✅ userImage 상태 업데이트 완료");
+
+    // localStorage에서 subject 정보 가져오기
+    let subject = getItem("subject");
+    console.log("🔍 현재 localStorage subject:", subject);
+
+    if (subject) {
+      // 기존 subject 객체가 있으면 imageSource만 업데이트
+      subject.imageSource = newImageUrl;
+      setItem("subject", subject);
+      console.log(
+        "✅ 프로필 이미지가 localStorage에 저장되었습니다:",
+        newImageUrl
+      );
+    } else {
+      // subject 객체가 없으면 새로 생성
+      subject = {
+        id: subjectId,
+        name: username,
+        imageSource: newImageUrl,
+      };
+      setItem("subject", subject);
+      console.log(
+        "✅ 새로운 subject 객체가 생성되고 이미지가 저장되었습니다:",
+        newImageUrl
+      );
+    }
+
+    // 기존 방식과의 호환성을 위해 개별 키도 업데이트
+    setItem("userImage", newImageUrl);
+    console.log("✅ 개별 키 userImage도 업데이트 완료");
+  };
+
   const handleClick = async (questionId) => {
     try {
       const question = queList.find((item) => item.id === questionId);
@@ -109,22 +152,12 @@ const AnswerPage = () => {
 
   const questionListProps = {
     data: queList,
+    img: userImage,
+    userName: username,
     dayjs,
     observerRef,
     handleClick,
-    isAnswerPage: true, // ✅ 답변페이지임을 명시
-    editable: true, // ✅ 케밥 메뉴 렌더링 활성화
-    editingAnswerId, //✅현재 수정 중인 답변의 ID
-    openMenuId, //✅현재 열린 드롭다운의 질문 ID
-    onEdit, //✅수정 버튼 클릭 처리
-    onCancelEdit, //	✅수정 취소 시 호출
-    handleReject, //✅	답변 거절 처리
-    toggleMenu, //	✅현재 메뉴 열기/닫기
-    subject: { id, name, imageSource }, // ✅AnswerForm용
-    onAnswerSuccess: async () => {
-      await refetch();
-      setEditingAnswerId(null);
-    }, //	✅답변 등록/수정 완료 시 콜백
+    onDataUpdate: handleDataUpdate,
   };
 
   return (
@@ -133,6 +166,7 @@ const AnswerPage = () => {
         img={userImage}
         userName={username}
         location={location}
+        onImageChange={handleImageChange}
       />
       <div className="answerBtnContents">
         <Button

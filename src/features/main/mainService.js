@@ -1,6 +1,7 @@
 import { createSubject } from "../../api/subjectApi";
 import { setItem } from "../../utils/localStorage";
 import { getItem } from "../../utils/localStorage";
+
 export async function createSubjectAndNavigate(
   name,
   navigate,
