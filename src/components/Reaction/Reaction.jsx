@@ -11,19 +11,19 @@ const Reaction = ({ like, dislike, questionId, disabled }) => {
   let [dislikeCount, setDislikeCount] = useState(dislike);
   let [reactState, setReactState] = useState(null);
 
-  // useEffect(() => {
-  //   async function fetchLatest() {
-  //     try {
-  //       const updated = await getQuestionListId(questionId);
-  //       setLikeCount(updated.like);
-  //       setDislikeCount(updated.dislike);
-  //     } catch (e) {
-  //       console.error("리액션 최신값 가져오기 실패", e);
-  //     }
-  //   }
+  useEffect(() => {
+    async function fetchLatest() {
+      try {
+        const updated = await getQuestionListId(questionId);
+        setLikeCount(updated.like);
+        setDislikeCount(updated.dislike);
+      } catch (e) {
+        console.error("리액션 최신값 가져오기 실패", e);
+      }
+    }
 
-  //   fetchLatest();
-  // }, [questionId]);
+    fetchLatest();
+  }, [questionId]);
 
   useEffect(() => {
     const reacted = getItem("reactedQuestions") || [];

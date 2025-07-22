@@ -49,11 +49,7 @@ function MainPage() {
           value={name}
           onChange={handleChange}
         />
-        <Button
-          variant="primary"
-          size="medium"
-          disabled={isLoading || !name.trim()}
-        >
+        <Button variant="primary" size="medium" disabled={isLoading || !name.trim()}>
           {isLoading ? "로딩중입니다..." : "질문 받기"}
         </Button>
       </form>

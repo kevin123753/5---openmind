@@ -5,7 +5,7 @@ import styles from "../../../components/Modal/Modal.module.css";
 import Input from "../../../components/Input/Input";
 import Button from "../../../components/Button/Button";
 import CloseIcon from "../../../components/Icon/modalCloseIcon";
-import Messages from "../../../components/Icon/Messages";
+import Messages from "../../../components/Icon/MessagesIcon";
 
 const Modal = ({ setModal, id, setQueList, img, userName }) => {
   const [question, setQuestion] = useState("");

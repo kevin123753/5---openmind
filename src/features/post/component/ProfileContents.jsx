@@ -36,9 +36,7 @@ const ProfileContents = ({ img, userName }) => {
     }
 
     if (!window.Kakao.Link) {
-      console.error(
-        "❌ Kakao.Link is undefined. SDK might not be loaded properly."
-      );
+      console.error("❌ Kakao.Link is undefined. SDK might not be loaded properly.");
       return;
     }
 
@@ -78,26 +76,9 @@ const ProfileContents = ({ img, userName }) => {
       <img src={img} alt="큰 프로필" />
       <h2>{userName}</h2>
       <div className="BtnContents">
-        <Button
-          variant="round"
-          size="xsmall"
-          className="styleLink"
-          leftIcon={<Link />}
-          onClick={handleUrlCopy}
-        />
-        <Button
-          variant="round"
-          size="xsmall"
-          className="styleKakao"
-          leftIcon={<Kakao />}
-          onClick={handleKakaoShare}
-        />
-        <Button
-          variant="round"
-          size="xsmall"
-          className="styleFacebook"
-          leftIcon={<Facebook />}
-        />
+        <Button variant="round" size="xsmall" className="styleLink" leftIcon={<Link />} onClick={handleUrlCopy} />
+        <Button variant="round" size="xsmall" className="styleKakao" leftIcon={<Kakao />} onClick={handleKakaoShare} />
+        <Button variant="round" size="xsmall" className="styleFacebook" leftIcon={<Facebook />} />
       </div>
       {toast && <Toast message="URL이 복사되었습니다" />}
     </div>
