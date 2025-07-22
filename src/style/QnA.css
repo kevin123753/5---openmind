@@ -138,6 +138,30 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+}
+.qnaTop .kebabMenu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 3rem;
+  right: 0;
+  padding: 0.2rem 0;
+  border: 0.1rem solid var(--gray-color-30);
+  border-radius: 0.8rem;
+}
+.qnaTop .kebabMenu button {
+  gap: 0.8rem;
+  font-size: 1.4rem;
+  padding: 0.5rem 1.2rem;
+}
+.qnaTop .kebabMenu button:hover {
+  color: var(--blue-color-50);
+}
+.qnaTop .kebabMenu button:active {
+  background-color: var(--gray-color-20);
+  color: var(--gray-color-60);
 }
 .answerBtnContents {
   width: 71.6rem;
