@@ -1,6 +1,7 @@
 /* Main page */
 main:has(.homePage) {
   background: url(/image/homeBg.png) no-repeat bottom center;
+  background-size: contain;
 }
 .homePage {
   display: flex;
