@@ -57,12 +57,31 @@ const QuestionList = ({
       // content가 비어있으면 기본값 사용
       const content = editedContent.trim() || "답변 내용";
       const isRejected = false;
-      await putAnswer(answerId, { content, isRejected });
+
+      const result = await putAnswer(answerId, { content, isRejected });
+
+      // ✅ 즉시 UI 업데이트
+      const updatedData = data.map((question) => {
+        if (question.answer?.id === answerId) {
+          return {
+            ...question,
+            answer: {
+              ...question.answer,
+              ...result,
+              content,
+              isRejected: false,
+            },
+          };
+        }
+        return question;
+      });
+
       setEditingAnswerId(null);
       setEditedContent("");
-      // 부모 컴포넌트에 데이터 업데이트 알림
+
+      // 부모 컴포넌트에 업데이트된 데이터 전달
       if (onDataUpdate) {
-        onDataUpdate(); // 기존 방식으로 데이터 새로고침
+        onDataUpdate(updatedData);
       }
     } catch (error) {
       console.error("답변 수정 실패:", error);
@@ -84,19 +103,67 @@ const QuestionList = ({
 
     setIsLoading(true);
     try {
-      await postAnswer(questionId, {
+      // 현재 질문의 상태 확인
+      const currentQuestion = data.find((q) => q.id === questionId);
+      const hasAnswer = !!currentQuestion?.answer;
+      const hasContent = !!currentQuestion?.answer?.content;
+      const isRejected = currentQuestion?.answer?.isRejected;
+
+      console.log("🔍 답변 작성 시작:", {
+        questionId,
+        hasAnswer,
+        hasContent,
+        isRejected,
         content: content.trim(),
-        isRejected: false,
       });
+
+      let result;
+      if (!hasAnswer) {
+        // 답변이 없는 경우: 새로 생성
+        console.log("📝 새 답변 생성 시도 중");
+        result = await postAnswer(questionId, {
+          content: content.trim(),
+          isRejected: false,
+        });
+      } else {
+        // 답변이 있지만 content가 null이거나 거절 취소된 경우: 수정
+        console.log("🔄 기존 답변 수정 시도 중:", {
+          answerId: currentQuestion.answer.id,
+          content: content.trim(),
+          isRejected: false,
+        });
+        result = await putAnswer(currentQuestion.answer.id, {
+          content: content.trim(),
+          isRejected: false,
+        });
+      }
+
+      // ✅ 즉시 UI 업데이트
+      const updatedData = data.map((question) => {
+        if (question.id === questionId) {
+          return {
+            ...question,
+            answer: {
+              ...question.answer,
+              ...result,
+              content: content.trim(),
+              isRejected: false,
+            },
+          };
+        }
+        return question;
+      });
+
       // 해당 질문의 답변 내용 초기화
       setNewAnswerContents((prev) => {
         const newMap = new Map(prev);
         newMap.delete(questionId);
         return newMap;
       });
-      // 부모 컴포넌트에 데이터 업데이트 알림
+
+      // 부모 컴포넌트에 업데이트된 데이터 전달
       if (onDataUpdate) {
-        onDataUpdate(); // 기존 방식으로 데이터 새로고침
+        onDataUpdate(updatedData);
       }
     } catch (error) {
       console.error("답변 작성 실패:", error);
@@ -179,6 +246,15 @@ const QuestionList = ({
           console.log("✅ 답변 거절 상태 변경 성공:", result);
         }
 
+        // 거절 취소 시 해당 질문의 답변 내용 초기화
+        if (isCurrentlyRejected) {
+          setNewAnswerContents((prev) => {
+            const newMap = new Map(prev);
+            newMap.delete(item.id);
+            return newMap;
+          });
+        }
+
         // 부모 컴포넌트에 데이터 업데이트 알림
         if (onDataUpdate) {
           onDataUpdate(); // 데이터 새로고침
@@ -209,7 +285,13 @@ const QuestionList = ({
       {data.map((item) => (
         <div className="items shadow-1" key={item.id}>
           <div className="qnaTop">
-            <Badge badgeActive={item.answer !== null} />
+            <Badge
+              badgeActive={
+                item.answer &&
+                item.answer.isRejected === false &&
+                !!item.answer.content
+              }
+            />
             <Button
               rightIcon={<MoreIcon />}
               onClick={(e) => {
@@ -235,14 +317,18 @@ const QuestionList = ({
                 >
                   삭제하기
                 </Button>
-                {/* 답변 거절/취소 버튼 */}
-                <Button
-                  className="rejectBtn"
-                  onClick={() => handleRejectToggle(item)}
-                  disabled={isLoading}
-                >
-                  {item.answer?.isRejected ? "거절 취소" : "답변 거절"}
-                </Button>
+                {/* 답변 거절/취소 버튼 - 답변이 없거나 거절된 경우에만 표시 */}
+                {(!item.answer ||
+                  item.answer?.isRejected ||
+                  (!item.answer?.content && !item.answer?.isRejected)) && (
+                  <Button
+                    className="rejectBtn"
+                    onClick={() => handleRejectToggle(item)}
+                    disabled={isLoading}
+                  >
+                    {item.answer?.isRejected ? "거절 취소" : "답변 거절"}
+                  </Button>
+                )}
               </div>
             )}
           </div>

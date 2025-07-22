@@ -8,7 +8,7 @@ const AnswerList = ({ item, img, userName }) => {
           <span>{item.createdAt}</span>
         </p>
         {!item.answer.isRejected ? (
-          <div className="qnaContent">답변{item.answer.content}</div>
+          <div className="qnaContent">{item.answer.content}</div>
         ) : (
           <p className="rejectedText">답변 거절</p>
         )}

@@ -56,7 +56,22 @@ function QuestionListPage() {
       setError(null);
       const offset = (currentPage - 1) * limit;
       const data = await getSubject({ sort, offset, limit });
-      setSubjects(data.results || []);
+
+      // ✅ selectedSubject에서 최신 이미지 정보 가져오기
+      const selectedSubject = getItem("selectedSubject");
+
+      // API 데이터와 selectedSubject 정보를 병합하여 최신 이미지 반영
+      const updatedSubjects = (data.results || []).map((subject) => {
+        if (selectedSubject && selectedSubject.id === subject.id) {
+          return {
+            ...subject,
+            imageSource: selectedSubject.imageSource || subject.imageSource,
+          };
+        }
+        return subject;
+      });
+
+      setSubjects(updatedSubjects);
       setCount(data.count || 0); // totalCount → count
     } catch (error) {
       setError(error.message || "잠시 후 다시 시도해 주세요.");
@@ -68,6 +83,18 @@ function QuestionListPage() {
   useEffect(() => {
     handleLoad();
   }, [currentPage, sort]);
+
+  // ✅ selectedSubject 변경 감지를 위한 useEffect 추가
+  useEffect(() => {
+    const handleStorageChange = () => {
+      handleLoad();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   const handleSortChange = (value) => {
     setSort(value);

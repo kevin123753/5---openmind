@@ -38,7 +38,16 @@ const AnswerPage = () => {
   // localStorage에서 subject 정보를 우선적으로 확인하여 userImage 상태 초기화
   const subjectFromStorage = getItem("subject");
   const [userImage, setUserImage] = useState(() => {
-    // localStorage의 subject.imageSource를 최우선으로 사용
+    // ✅ selectedSubject를 최우선으로 확인
+    const selectedSubject = getItem("selectedSubject");
+    if (selectedSubject?.imageSource) {
+      console.log(
+        "🔍 userImage 초기화: selectedSubject.imageSource 사용",
+        selectedSubject.imageSource
+      );
+      return selectedSubject.imageSource;
+    }
+    // localStorage의 subject.imageSource를 다음으로 사용
     if (subjectFromStorage?.imageSource) {
       console.log(
         "🔍 userImage 초기화: localStorage subject.imageSource 사용",
@@ -68,6 +77,21 @@ const AnswerPage = () => {
       setItem("userImage", imageSource);
     }
   }, [id, name, imageSource]);
+
+  // ✅ selectedSubject 변경 감지를 위한 useEffect 추가
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const selectedSubject = getItem("selectedSubject");
+      if (selectedSubject && selectedSubject.id === subjectId) {
+        setUserImage(selectedSubject.imageSource || "");
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, [subjectId]);
 
   // 리스트 받아옴
   const { queList, setQueList, refetch } = useQuestionList(subjectId);
@@ -102,6 +126,8 @@ const AnswerPage = () => {
       // 기존 subject 객체가 있으면 imageSource만 업데이트
       subject.imageSource = newImageUrl;
       setItem("subject", subject);
+      // ✅ 요구사항: selectedSubject로도 저장
+      setItem("selectedSubject", subject);
       console.log(
         "✅ 프로필 이미지가 localStorage에 저장되었습니다:",
         newImageUrl
@@ -114,6 +140,8 @@ const AnswerPage = () => {
         imageSource: newImageUrl,
       };
       setItem("subject", subject);
+      // ✅ 요구사항: selectedSubject로도 저장
+      setItem("selectedSubject", subject);
       console.log(
         "✅ 새로운 subject 객체가 생성되고 이미지가 저장되었습니다:",
         newImageUrl
