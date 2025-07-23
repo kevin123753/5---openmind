@@ -5,6 +5,9 @@ const API_BASE = "https://openmind-api.vercel.app/17-5";
 // API Base URL 검증
 console.log("🔧 API_BASE 확인:", API_BASE);
 
+// 진행 중인 요청을 추적하기 위한 Map
+const pendingRequests = new Map();
+
 export async function handleReaction(
   questionId,
   type,
@@ -14,6 +17,9 @@ export async function handleReaction(
   const CORRECT_ENDPOINT = `/questions/${questionId}/reaction/`;
   const reacted = getItem(storageKey) || [];
   const reactionKey = `${type}-${questionId}`;
+
+  // 요청 키 생성
+  const requestKey = `${questionId}-${type}`;
 
   console.log("🚀 handleReaction 호출:", { questionId, type, reacted });
 
@@ -25,6 +31,18 @@ export async function handleReaction(
       error: "이미 반응을 완료했습니다",
     };
   }
+
+  // 이미 진행 중인 동일한 요청이 있는지 확인
+  if (pendingRequests.has(requestKey)) {
+    console.log("❌ 이미 진행 중인 요청입니다:", requestKey);
+    return {
+      success: false,
+      error: "이미 처리 중인 요청입니다. 잠시만 기다려주세요.",
+    };
+  }
+
+  // 진행 중인 요청으로 등록
+  pendingRequests.set(requestKey, true);
 
   try {
     // 올바른 엔드포인트로 시도
@@ -105,6 +123,13 @@ export async function handleReaction(
         );
       }
 
+      // 429 에러인 경우 요청 제한
+      if (response.status === 429) {
+        throw new Error(
+          `요청 제한: 너무 많은 요청을 보냈습니다. 잠시 후 다시 시도해주세요. (${response.status} ${response.statusText})`
+        );
+      }
+
       throw new Error(`서버 오류: ${response.status} ${response.statusText}`);
     }
 
@@ -130,5 +155,8 @@ export async function handleReaction(
       success: false,
       error: error.message,
     };
+  } finally {
+    // 진행 중인 요청 제거
+    pendingRequests.delete(requestKey);
   }
 }
