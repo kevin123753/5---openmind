@@ -1,9 +1,13 @@
 /****** dayjs 라이브러리 ******/
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import "dayjs/locale/ko";
 
 dayjs.extend(relativeTime);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 dayjs.locale("ko");
 
 import Input from "../../../components/Input/Input";
@@ -54,7 +58,17 @@ const AnswerList = ({
       <div>
         <p className="user">
           {userName}
-          <span>{dayjs(item.createdAt).fromNow()}</span>
+          {item.answer && (item.answer.updatedAt || item.answer.createdAt) && (
+            <span>
+              {(() => {
+                const timeString =
+                  item.answer.updatedAt || item.answer.createdAt;
+                // 서버 시간을 UTC로 파싱하고 로컬 시간으로 변환
+                const parsedTime = dayjs.utc(timeString).local();
+                return parsedTime.fromNow();
+              })()}
+            </span>
+          )}
         </p>
         <div>
           {isEditing ? (
@@ -75,7 +89,8 @@ const AnswerList = ({
                 variant="primary"
                 disabled={!editedContent.trim() || isLoading}
                 onClick={() => onEditComplete(item.answer.id)}
-                className="answerBtn">
+                className="answerBtn"
+              >
                 {isLoading ? "수정 중..." : "수정완료"}
               </Button>
             </div>
@@ -110,7 +125,8 @@ const AnswerList = ({
                     variant="primary"
                     disabled={!newAnswerContent.trim() || isLoading}
                     onClick={() => onNewAnswer(item.id)}
-                    className="answerBtn">
+                    className="answerBtn"
+                  >
                     {isLoading ? "답변 중..." : "답변완료"}
                   </Button>
                 </div>

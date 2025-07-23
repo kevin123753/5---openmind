@@ -10,7 +10,14 @@ import KebabCloseIcon from "../../../components/Icon/KebabCloseIcon";
 import RejectionIcon from "../../../components/Icon/RejectionIcon";
 import AnswerList from "./AnswerList";
 
-const QuestionList = ({ data, img, userName, dayjs, handleClick, onDataUpdate }) => {
+const QuestionList = ({
+  data,
+  img,
+  userName,
+  dayjs,
+  handleClick,
+  onDataUpdate,
+}) => {
   const [questionId, setQuestionId] = useState(null);
   const [editingAnswerId, setEditingAnswerId] = useState(null);
   const [editedContent, setEditedContent] = useState("");
@@ -279,7 +286,13 @@ const QuestionList = ({ data, img, userName, dayjs, handleClick, onDataUpdate })
       {data.map((item) => (
         <div className="items shadow-1" key={item.id}>
           <div className="qnaTop">
-            <Badge badgeActive={item.answer && item.answer.isRejected === false && !!item.answer.content} />
+            <Badge
+              badgeActive={
+                item.answer &&
+                item.answer.isRejected === false &&
+                !!item.answer.content
+              }
+            />
             <Button
               rightIcon={<MoreIcon />}
               onClick={(e) => {
@@ -293,23 +306,28 @@ const QuestionList = ({ data, img, userName, dayjs, handleClick, onDataUpdate })
                   leftIcon={<KebabEditIcon />}
                   className="editBtn"
                   onClick={() => handleEditClick(item)}
-                  disabled={!item.answer || isLoading}>
+                  disabled={!item.answer || isLoading}
+                >
                   수정하기
                 </Button>
                 <Button
                   leftIcon={<KebabCloseIcon />}
                   className="closeBtn"
                   onClick={() => handleDeleteClick(item)}
-                  disabled={isLoading}>
+                  disabled={isLoading}
+                >
                   삭제하기
                 </Button>
                 {/* 답변 거절/취소 버튼 - 답변이 없거나 거절된 경우에만 표시 */}
-                {(!item.answer || item.answer?.isRejected || (!item.answer?.content && !item.answer?.isRejected)) && (
+                {(!item.answer ||
+                  item.answer?.isRejected ||
+                  (!item.answer?.content && !item.answer?.isRejected)) && (
                   <Button
                     leftIcon={<RejectionIcon />}
                     className="rejectBtn"
                     onClick={() => handleRejectToggle(item)}
-                    disabled={isLoading}>
+                    disabled={isLoading}
+                  >
                     {item.answer?.isRejected ? "거절 취소" : "답변 거절"}
                   </Button>
                 )}
@@ -318,7 +336,7 @@ const QuestionList = ({ data, img, userName, dayjs, handleClick, onDataUpdate })
           </div>
           <div className="titleContent" onClick={() => handleClick(item.id)}>
             <p className="subTitle">
-              질문<span>{dayjs(item.createdAt).fromNow()}</span>
+              질문<span>{dayjs.utc(item.createdAt).local().fromNow()}</span>
             </p>
             <p className="title">{item.content}</p>
           </div>
@@ -331,12 +349,18 @@ const QuestionList = ({ data, img, userName, dayjs, handleClick, onDataUpdate })
             setEditedContent={setEditedContent}
             onEditComplete={handleEditComplete}
             newAnswerContent={newAnswerContents.get(item.id) || ""}
-            setNewAnswerContent={(content) => updateNewAnswerContent(item.id, content)}
+            setNewAnswerContent={(content) =>
+              updateNewAnswerContent(item.id, content)
+            }
             onNewAnswer={handleNewAnswer}
             isLoading={isLoading}
           />
           <div className="likeContent">
-            <Reaction like={item.like} dislike={item.dislike} questionId={item.id} />
+            <Reaction
+              like={item.like}
+              dislike={item.dislike}
+              questionId={item.id}
+            />
           </div>
         </div>
       ))}
