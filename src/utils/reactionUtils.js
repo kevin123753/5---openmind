@@ -10,9 +10,12 @@ export async function handleReaction(
   type,
   storageKey = "reactedQuestions"
 ) {
+  // 올바른 엔드포인트 (API 명세에 따른)
+  const CORRECT_ENDPOINT = `/questions/${questionId}/reactions/`;
+
   // 대체 엔드포인트 목록 (API 명세가 다를 경우 대비)
   const ENDPOINT_VARIANTS = [
-    `/questions/${questionId}/reactions/`,
+    CORRECT_ENDPOINT,
     `/questions/${questionId}/reaction/`,
     `/questions/${questionId}/reactions`,
     `/questions/${questionId}/reaction`,
@@ -32,9 +35,8 @@ export async function handleReaction(
   }
 
   try {
-    // 첫 번째 엔드포인트로 시도
-    const primaryEndpoint = ENDPOINT_VARIANTS[0];
-    const requestUrl = new URL(primaryEndpoint, API_BASE).href;
+    // 올바른 엔드포인트로 시도
+    const requestUrl = `${API_BASE}${CORRECT_ENDPOINT}`;
     const requestBody = { type };
 
     console.log("🔧 API 요청 준비:", {
@@ -44,7 +46,9 @@ export async function handleReaction(
       requestUrl,
       isAbsolute: requestUrl.startsWith("http"),
       requestBody,
-      endpointVariants: ENDPOINT_VARIANTS,
+      correctEndpoint: CORRECT_ENDPOINT,
+      expectedUrl: `${API_BASE}/questions/${questionId}/reactions/`,
+      urlMatch: requestUrl === `${API_BASE}/questions/${questionId}/reactions/`,
     });
 
     console.log("📡 API 호출:", {
