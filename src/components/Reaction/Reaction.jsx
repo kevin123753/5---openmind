@@ -11,6 +11,13 @@ const Reaction = ({ like = 0, dislike = 0, questionId, disabled }) => {
   const [dislikeCount, setDislikeCount] = useState(dislike);
   const [userReaction, setUserReaction] = useState(null); // "like" | "dislike" | null
   const [toastMsg, setToastMsg] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  // props가 변경될 때 카운트 업데이트
+  useEffect(() => {
+    setLikeCount(like);
+    setDislikeCount(dislike);
+  }, [like, dislike]);
 
   // 컴포넌트 마운트 시 localStorage에서 사용자의 반응 상태 확인
   useEffect(() => {
@@ -33,59 +40,53 @@ const Reaction = ({ like = 0, dislike = 0, questionId, disabled }) => {
       currentReaction: userReaction,
     });
 
-    // 같은 버튼을 다시 누른 경우 → 반응 취소
-    if (userReaction === clickedType) {
-      console.log("❌ 반응 취소:", clickedType);
-
-      const success = await handleReaction(questionId, clickedType);
-      if (!success) return;
-
-      setUserReaction(null);
-
-      // 취소 시 해당 타입의 카운트를 -1 감소
-      if (clickedType === "like") {
-        setLikeCount((prev) => prev - 1);
-      } else {
-        setDislikeCount((prev) => prev - 1);
-      }
-
-      showToast(
-        `${clickedType === "like" ? "좋아요" : "싫어요"}를 취소했습니다`
-      );
+    // 이미 반응을 한 경우 → 더 이상 반응 불가
+    if (userReaction) {
+      console.log("❌ 이미 반응을 완료했습니다:", userReaction);
+      showToast("이미 반응을 완료했습니다");
       return;
     }
 
-    // 다른 버튼을 누른 경우 → 기존 반응 취소 후 새 반응 등록
-    if (userReaction && userReaction !== clickedType) {
-      console.log("🔄 반응 변경:", { from: userReaction, to: clickedType });
+    // 처리 중인 경우 → 중복 요청 방지
+    if (isProcessing) {
+      console.log("❌ 이미 처리 중입니다");
+      return;
+    }
 
-      // 기존 반응 취소
-      const cancelSuccess = await handleReaction(questionId, userReaction);
-      if (cancelSuccess) {
-        // 기존 반응 카운트 -1 감소
-        if (userReaction === "like") {
-          setLikeCount((prev) => prev - 1);
+    setIsProcessing(true);
+
+    try {
+      // 새 반응 등록
+      console.log("➕ 새 반응 등록:", clickedType);
+      const result = await handleReaction(questionId, clickedType);
+
+      if (!result.success) {
+        showToast("반응 처리에 실패했습니다");
+        return;
+      }
+
+      setUserReaction(clickedType);
+
+      // 서버에서 받은 실제 카운트로 업데이트
+      if (result.data) {
+        setLikeCount(result.data.like || likeCount);
+        setDislikeCount(result.data.dislike || dislikeCount);
+      } else {
+        // 서버 응답이 없는 경우에만 클라이언트에서 증가
+        if (clickedType === "like") {
+          setLikeCount((prev) => prev + 1);
         } else {
-          setDislikeCount((prev) => prev - 1);
+          setDislikeCount((prev) => prev + 1);
         }
       }
+
+      showToast(`${clickedType === "like" ? "좋아요" : "싫어요"}를 눌렀습니다`);
+    } catch (error) {
+      console.error("반응 처리 중 오류:", error);
+      showToast("반응 처리에 실패했습니다");
+    } finally {
+      setIsProcessing(false);
     }
-
-    // 새 반응 등록
-    console.log("➕ 새 반응 등록:", clickedType);
-    const success = await handleReaction(questionId, clickedType);
-    if (!success) return;
-
-    setUserReaction(clickedType);
-
-    // 새 반응 카운트 +1 증가
-    if (clickedType === "like") {
-      setLikeCount((prev) => prev + 1);
-    } else {
-      setDislikeCount((prev) => prev + 1);
-    }
-
-    showToast(`${clickedType === "like" ? "좋아요" : "싫어요"}를 눌렀습니다`);
   };
 
   return (
@@ -95,7 +96,7 @@ const Reaction = ({ like = 0, dislike = 0, questionId, disabled }) => {
           userReaction === "like" ? styles.like : ""
         }`}
         onClick={() => reactionEvent("like")}
-        disabled={disabled}
+        disabled={disabled || userReaction !== null || isProcessing}
       >
         <ThumbsUp />
         좋아요
@@ -106,7 +107,7 @@ const Reaction = ({ like = 0, dislike = 0, questionId, disabled }) => {
           userReaction === "dislike" ? styles.dislike : ""
         }`}
         onClick={() => reactionEvent("dislike")}
-        disabled={disabled}
+        disabled={disabled || userReaction !== null || isProcessing}
       >
         <ThumbsDown />
         싫어요

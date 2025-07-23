@@ -19,6 +19,16 @@
   opacity: 0.8;
 }
 
+.item:disabled {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+.item:disabled:hover {
+  opacity: 0.5;
+}
+
 .item span {
   display: none;
 }
