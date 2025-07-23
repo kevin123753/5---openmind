@@ -19,14 +19,27 @@ function QuestionListPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(null);
   const [count, setCount] = useState(0); // totalCount → count
+  const size = useResponsiveSize();
 
-  const limit = 8;
+  // 반응형 limit 설정
+  const getLimit = () => {
+    switch (size) {
+      case "large": // PC
+        return 8;
+      case "medium": // 태블릿
+      case "small": // 모바일
+        return 6;
+      default:
+        return 8;
+    }
+  };
+
+  const [limit, setLimit] = useState(getLimit());
   const pageGroupSize = 5;
   const totalPages = Math.ceil(count / limit); // totalCount → count
   const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
   const startPage = currentGroup * pageGroupSize + 1;
   const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);
-  const size = useResponsiveSize();
 
   const pageNumbers = Array.from(
     { length: endPage - startPage + 1 },
@@ -82,7 +95,16 @@ function QuestionListPage() {
 
   useEffect(() => {
     handleLoad();
-  }, [currentPage, sort]);
+  }, [currentPage, sort, limit]);
+
+  // 화면 크기 변경 시 limit 재조정
+  useEffect(() => {
+    const newLimit = getLimit();
+    if (newLimit !== limit) {
+      setLimit(newLimit);
+      setCurrentPage(1); // limit이 변경되면 첫 페이지로 이동
+    }
+  }, [size]);
 
   // ✅ selectedSubject 변경 감지를 위한 useEffect 추가
   useEffect(() => {

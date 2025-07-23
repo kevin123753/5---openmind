@@ -3,7 +3,9 @@ import { useState, useEffect } from "react";
 export default function useResponsiveSize() {
   const getSize = () => {
     const width = window.innerWidth;
-    return width <= 767 ? "small" : "medium";
+    if (width <= 767) return "small"; // 모바일
+    if (width <= 1024) return "medium"; // 태블릿
+    return "large"; // PC
   };
 
   const [size, setSize] = useState(getSize);
