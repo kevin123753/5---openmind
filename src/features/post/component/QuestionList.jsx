@@ -1,15 +1,17 @@
 import Badge from "../../../components/Badge/Badge";
 import Button from "../../../components/Button/Button";
 import Reaction from "../../../components/Reaction/Reaction";
-import MoreIcon from "../../../components/Icon/MoreIcon";
-import AnswerList from "./AnswerList";
 
-const QuestionList = ({ data, img, userName, dayjs, handleClick }) => {
+const QuestionList = ({ data, dayjs, handleClick }) => {
   return (
     <>
       {data.map((item) => (
         <>
-          <div className="items shadow-1" key={item.id} onClick={() => handleClick(item.id)}>
+          <div
+            className="items shadow-1"
+            key={item.id}
+            onClick={() => handleClick(item.id)}
+          >
             <Badge badgeActive={item.answer !== null} />
 
             <div className="titleContent">
@@ -18,9 +20,12 @@ const QuestionList = ({ data, img, userName, dayjs, handleClick }) => {
               </p>
               <p className="title">{item.content}</p>
             </div>
-            {item.answer && <AnswerList item={item} img={img} userName={userName} />}
             <div className="likeContent">
-              <Reaction like={item.like} dislike={item.dislike} questionId={item.id} />
+              <Reaction
+                like={item.like}
+                dislike={item.dislike}
+                questionId={item.id}
+              />
             </div>
           </div>
         </>

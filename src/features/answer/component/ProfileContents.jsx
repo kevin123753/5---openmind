@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import useCopyUrlToast from "../../../hooks/useCopyUrlToast";
 import Button from "../../../components/Button/Button";
 import Link from "../../../components/Icon/LinkIcon";
@@ -6,9 +6,16 @@ import Kakao from "../../../components/Icon/KakaoIcon";
 import Facebook from "../../../components/Icon/FacebookIcon";
 import Toast from "../../../components/Toast/Toast";
 
-const ProfileContents = ({ img, userName }) => {
+const ProfileContents = ({ img, userName, onImageChange }) => {
   const { toast, copyUrl } = useCopyUrlToast();
   const url = window.location.origin + location.pathname;
+  const fileInputRef = useRef(null);
+  const [currentImage, setCurrentImage] = useState(img);
+
+  // 이미지가 변경되면 상태 업데이트
+  useEffect(() => {
+    setCurrentImage(img);
+  }, [img]);
 
   // ✅ 최초 진입 시 Kakao SDK 초기화
   useEffect(() => {
@@ -36,7 +43,9 @@ const ProfileContents = ({ img, userName }) => {
     }
 
     if (!window.Kakao.Link) {
-      console.error("❌ Kakao.Link is undefined. SDK might not be loaded properly.");
+      console.error(
+        "❌ Kakao.Link is undefined. SDK might not be loaded properly."
+      );
       return;
     }
 
@@ -71,14 +80,83 @@ const ProfileContents = ({ img, userName }) => {
     }
   };
 
+  // 이미지 업로드 핸들러
+  const handleImageUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  // 파일 선택 핸들러
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // 이미지 파일인지 확인
+    if (!file.type.startsWith("image/")) {
+      alert("이미지 파일만 업로드 가능합니다.");
+      return;
+    }
+
+    // 파일 크기 제한 (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("파일 크기는 5MB 이하여야 합니다.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imageUrl = e.target.result;
+      setCurrentImage(imageUrl);
+
+      // 부모 컴포넌트에 이미지 변경 알림
+      if (onImageChange) {
+        onImageChange(imageUrl);
+      }
+    };
+    reader.readAsDataURL(file);
+
+    // 파일 input 초기화 (같은 파일을 다시 선택할 수 있도록)
+    event.target.value = "";
+  };
+
   return (
     <div className="profileContents">
-      <img src={img} alt="큰 프로필" />
+      <div className="profileImageContainer">
+        <img
+          src={currentImage}
+          alt="큰 프로필"
+          onClick={handleImageUpload}
+          style={{ cursor: "pointer" }}
+        />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+        />
+      </div>
       <h2>{userName}</h2>
       <div className="BtnContents">
-        <Button variant="round" size="xsmall" className="styleLink" leftIcon={<Link />} onClick={handleUrlCopy} />
-        <Button variant="round" size="xsmall" className="styleKakao" leftIcon={<Kakao />} onClick={handleKakaoShare} />
-        <Button variant="round" size="xsmall" className="styleFacebook" leftIcon={<Facebook />} />
+        <Button
+          variant="round"
+          size="xsmall"
+          className="styleLink"
+          leftIcon={<Link />}
+          onClick={handleUrlCopy}
+        />
+        <Button
+          variant="round"
+          size="xsmall"
+          className="styleKakao"
+          leftIcon={<Kakao />}
+          onClick={handleKakaoShare}
+        />
+        <Button
+          variant="round"
+          size="xsmall"
+          className="styleFacebook"
+          leftIcon={<Facebook />}
+        />
       </div>
       {toast && <Toast message="URL이 복사되었습니다" />}
     </div>

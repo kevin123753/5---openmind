@@ -5,7 +5,7 @@ import { getItem } from "../../utils/localStorage";
 import { useNavigate, Link } from "react-router-dom";
 import styles from "./ListPage.module.css";
 // import openmindLogo from "../../assets/openmindLogo.png";
-// import ArrowRightIcon from "../../components/icon/ArrowRightIcon";
+// import ArrowRightIcon from "../../components/Icon/ArrowRightIcon";
 import ArrowDownIcon from "../../components/Icon/ArrowDownIcon.jsx";
 import ArrowUpIcon from "../../components/Icon/ArrowUpIcon.jsx";
 import useResponsiveSize from "../../hooks/useResponsiveSize";
@@ -56,7 +56,22 @@ function QuestionListPage() {
       setError(null);
       const offset = (currentPage - 1) * limit;
       const data = await getSubject({ sort, offset, limit });
-      setSubjects(data.results || []);
+
+      // ✅ selectedSubject에서 최신 이미지 정보 가져오기
+      const selectedSubject = getItem("selectedSubject");
+
+      // API 데이터와 selectedSubject 정보를 병합하여 최신 이미지 반영
+      const updatedSubjects = (data.results || []).map((subject) => {
+        if (selectedSubject && selectedSubject.id === subject.id) {
+          return {
+            ...subject,
+            imageSource: selectedSubject.imageSource || subject.imageSource,
+          };
+        }
+        return subject;
+      });
+
+      setSubjects(updatedSubjects);
       setCount(data.count || 0); // totalCount → count
     } catch (error) {
       setError(error.message || "잠시 후 다시 시도해 주세요.");
@@ -68,6 +83,18 @@ function QuestionListPage() {
   useEffect(() => {
     handleLoad();
   }, [currentPage, sort]);
+
+  // ✅ selectedSubject 변경 감지를 위한 useEffect 추가
+  useEffect(() => {
+    const handleStorageChange = () => {
+      handleLoad();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   const handleSortChange = (value) => {
     setSort(value);
@@ -101,35 +128,24 @@ function QuestionListPage() {
   return (
     <div className={styles.listPage}>
       {/* <div className={styles["top-row"]}>
-          <Link to="/" className={styles["logo-link"]}>
-            <img
-              src={openmindLogo}
-              alt="메인페이지 가기"
-              className={styles["list-logo"]}
-            />
-            <img
-              src={openmindLogo}
-              alt="메인페이지 가기"
-              className={styles["list-logo"]}
-            />
-          </Link>
-          <div className={styles["list-answer-button"]}>
-            <Button
-              variant="outline"
-              size={size}
-              rightIcon={<ArrowRightIcon />}
-              onClick={handleClick}
-            >
-            <Button
-              variant="outline"
-              size={size}
-              rightIcon={<ArrowRightIcon />}
-              onClick={handleClick}
-            >
-              답변 하러가기
-            </Button>
-          </div>
-        </div> */}
+        <Link to="/" className={styles["logo-link"]}>
+          <img
+            src={openmindLogo}
+            alt="메인페이지 가기"
+            className={styles["list-logo"]}
+          />
+        </Link>
+        <div className={styles["list-answer-button"]}>
+          <Button
+            variant="outline"
+            size={size}
+            rightIcon={<ArrowRightIcon />}
+            onClick={handleClick}
+          >
+            답변 하러가기
+          </Button>
+        </div>
+      </div> */}
 
       <div>
         <h2 className={styles.listTopic}>누구에게 질문할까요?</h2>

@@ -42,7 +42,8 @@
   background-color: var(--gray-color-10);
 }
 .focused.primary {
-  border: 0.2rem solid var(--brown-color-40);
+  border: 0.1rem solid transparent;
+  box-shadow: 0 0 0 0.2rem var(--brown-color-40);
 }
 .filled.primary .input {
   color: var(--gray-color-60);
@@ -54,8 +55,8 @@
   color: var(--gray-color-40);
 }
 .filled {
-  border: 0.2rem solid var(--brown-color-40);
-  /* background-color: var(--gray-color-20); */
+  border: 0.1rem solid transparent;
+  background-color: var(--gray-color-20);
   color: var(--gray-color-60);
 }
 
