@@ -22,19 +22,19 @@ export async function handleReaction(
   }
 
   try {
-    const requestUrl = `${API_BASE}/questions/${questionId}/reaction/`;
+    const requestUrl = `${API_BASE}/questions/${questionId}/reaction`;
     const requestBody = { type };
 
     console.log("📡 API 호출:", {
       url: requestUrl,
-      method: "PATCH",
+      method: "POST",
       body: requestBody,
       questionId,
       type,
     });
 
     const response = await fetch(requestUrl, {
-      method: "PATCH",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),
     });
@@ -53,8 +53,19 @@ export async function handleReaction(
         statusText: response.statusText,
         errorText,
         url: requestUrl,
+        method: "POST",
         body: requestBody,
+        questionId,
+        type,
       });
+
+      // 405 에러인 경우 메서드 문제임을 명시
+      if (response.status === 405) {
+        throw new Error(
+          `메서드 오류: POST가 허용되지 않습니다. (${response.status} ${response.statusText})`
+        );
+      }
+
       throw new Error(`서버 오류: ${response.status} ${response.statusText}`);
     }
 
