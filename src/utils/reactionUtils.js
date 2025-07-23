@@ -34,7 +34,6 @@ export async function handleReaction(
         body: JSON.stringify({ type }),
       }
     );
-
     console.log("📡 응답:", { status: response.status, ok: response.ok });
 
     if (!response.ok) {

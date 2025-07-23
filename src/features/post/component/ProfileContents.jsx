@@ -5,6 +5,7 @@ import Link from "../../../components/Icon/LinkIcon";
 import Kakao from "../../../components/Icon/KakaoIcon";
 import Facebook from "../../../components/Icon/FacebookIcon";
 import Toast from "../../../components/Toast/Toast";
+import FacebookIcon from "../../../components/Icon/FacebookIcon";
 
 const ProfileContents = ({ img, userName }) => {
   const { toast, copyUrl } = useCopyUrlToast();
@@ -36,7 +37,9 @@ const ProfileContents = ({ img, userName }) => {
     }
 
     if (!window.Kakao.Link) {
-      console.error("❌ Kakao.Link is undefined. SDK might not be loaded properly.");
+      console.error(
+        "❌ Kakao.Link is undefined. SDK might not be loaded properly."
+      );
       return;
     }
 
@@ -49,7 +52,8 @@ const ProfileContents = ({ img, userName }) => {
         content: {
           title: "OpenMind에서 질문을 남겨보세요!",
           description: "링크로 접속해 바로 질문할 수 있어요.",
-          imageUrl: "https://openmind.dev/default-thumbnail.jpg", // ✅ 반드시 HTTPS
+          imageUrl:
+            "https://5team-openmind-qbdd-git-main-jaejoons-projects.vercel.app/image/favicon/apple-touch-icon.png",
           link: {
             mobileWebUrl: shareUrl,
             webUrl: shareUrl,
@@ -71,14 +75,41 @@ const ProfileContents = ({ img, userName }) => {
     }
   };
 
+  const handleFacebookShare = () => {
+    const shareUrl =
+      "https://5team-openmind-qbdd-dlsiph62l-jaejoons-projects.vercel.app/share-facebook";
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      shareUrl
+    )}`;
+    window.open(facebookUrl, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <div className="profileContents">
       <img src={img} alt="큰 프로필" />
       <h2>{userName}</h2>
       <div className="BtnContents">
-        <Button variant="round" size="xsmall" className="styleLink" leftIcon={<Link />} onClick={handleUrlCopy} />
-        <Button variant="round" size="xsmall" className="styleKakao" leftIcon={<Kakao />} onClick={handleKakaoShare} />
-        <Button variant="round" size="xsmall" className="styleFacebook" leftIcon={<Facebook />} />
+        <Button
+          variant="round"
+          size="xsmall"
+          className="styleLink"
+          leftIcon={<Link />}
+          onClick={handleUrlCopy}
+        />
+        <Button
+          variant="round"
+          size="xsmall"
+          className="styleKakao"
+          leftIcon={<Kakao />}
+          onClick={handleKakaoShare}
+        />
+        <Button
+          variant="round"
+          size="xsmall"
+          className="styleFacebook"
+          leftIcon={<FacebookIcon />}
+          onClick={handleFacebookShare}
+        />
       </div>
       {toast && <Toast message="URL이 복사되었습니다" />}
     </div>

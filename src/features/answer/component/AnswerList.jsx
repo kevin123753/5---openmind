@@ -12,7 +12,6 @@ dayjs.locale("ko");
 
 import Input from "../../../components/Input/Input";
 import Button from "../../../components/Button/Button";
-
 const AnswerList = ({
   item,
   img,
