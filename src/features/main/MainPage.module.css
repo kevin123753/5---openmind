@@ -32,17 +32,9 @@ main:has(.homeForm) {
 }
 
 @media (max-width: 767px) {
-  header:has(+ main .homePage) {
-    position: absolute;
-    top: 16.2rem;
-  }
-  header:has(+ main .homePage) button {
-    padding: 0.8rem 1.2rem;
-    font-size: 1.4rem;
-  }
   .homePage {
     gap: 8.2rem;
-    padding-top: 8rem;
+    padding-top: 2rem;
   }
   .logo {
     width: 24.8rem;

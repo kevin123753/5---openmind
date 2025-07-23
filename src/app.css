@@ -22,25 +22,19 @@ main {
   display: none;
 }
 
-/****** 반응형 ******/
+/* Header 기본 스타일 보장 */
+header {
+  box-sizing: border-box;
+}
 
+/****** 반응형 ******/
 @media (max-width: 767px) {
-  .header {
-    flex-direction: column;
-    gap: 2rem;
-  }
-  .header button {
-    margin-left: 0;
-  }
   main {
     padding: 0 2.4rem;
   }
 }
 
 @media (min-width: 768px) and (max-width: 1199px) {
-  .header {
-    padding: 4rem 5rem 4.6rem;
-  }
   main {
     padding: 0 3.2rem;
   }

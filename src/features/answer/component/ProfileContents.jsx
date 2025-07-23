@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import useCopyUrlToast from "../../../hooks/useCopyUrlToast";
 import Button from "../../../components/Button/Button";
 import Link from "../../../components/Icon/LinkIcon";
-import Kakao from "../../../components/Icon/KakaoIcon";
+import KakaoIcon from "../../../components/Icon/KakaoIcon";
 import FacebookIcon from "../../../components/Icon/FacebookIcon";
 import Toast from "../../../components/Toast/Toast";
 
@@ -157,7 +157,7 @@ const ProfileContents = ({ img, userName, onImageChange }) => {
           variant="round"
           size="xsmall"
           className="styleKakao"
-          leftIcon={<Kakao />}
+          leftIcon={<KakaoIcon />}
           onClick={handleKakaoShare}
         />
         <Button

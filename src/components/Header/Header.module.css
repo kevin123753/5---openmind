@@ -1,5 +1,5 @@
 /* Header */
-header {
+.header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -8,9 +8,45 @@ header {
   height: 14.7rem;
   min-height: 5.7rem;
   margin: 0 auto;
+  padding: 0 2rem;
   transition: all 0.5s;
   z-index: 100;
+  box-sizing: border-box;
+  position: relative;
 }
-header button {
+
+.header button {
   margin-left: auto;
+  flex-shrink: 0;
+}
+
+.header a {
+  flex-shrink: 0;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 767px) {
+  .header {
+    flex-direction: column;
+    gap: 2rem;
+    height: auto;
+    min-height: 8rem;
+    padding: 2rem;
+  }
+
+  .header button {
+    margin-left: 0;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .header {
+    padding: 4rem 5rem 4.6rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .header {
+    padding: 4rem 2rem 4.6rem;
+  }
 }

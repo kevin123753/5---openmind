@@ -3,7 +3,7 @@ import { getItem } from "../../utils/localStorage";
 import styles from "./Header.module.css";
 import Button from "../Button/Button";
 import HeaderLogo from "../Icon/HeaderLogo";
-import ArrowRight from "../Icon/ArrowRightIcon";
+import ArrowRightIcon from "../Icon/ArrowRightIcon";
 
 const Header = () => {
   const { pathname } = useLocation();
@@ -20,7 +20,7 @@ const Header = () => {
   };
 
   return (
-    <header className="header">
+    <header className={styles.header}>
       {pathname !== "/" ? (
         <Link to="/">
           <HeaderLogo />
@@ -30,14 +30,20 @@ const Header = () => {
         <Button
           variant="outline"
           size="medium"
-          rightIcon={<ArrowRight />}
+          rightIcon={<ArrowRightIcon />}
           onClick={() => {
             navigate("/list");
-          }}>
+          }}
+        >
           질문하러가기
         </Button>
       ) : pathname === "/list" ? (
-        <Button variant="outline" size="medium" rightIcon={<ArrowRight />} onClick={handleClick}>
+        <Button
+          variant="outline"
+          size="medium"
+          rightIcon={<ArrowRightIcon />}
+          onClick={handleClick}
+        >
           답변하러가기
         </Button>
       ) : null}
