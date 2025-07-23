@@ -22,7 +22,7 @@ export async function handleReaction(
   }
 
   try {
-    const requestUrl = `${API_BASE}/questions/${questionId}/reaction`;
+    const requestUrl = `${API_BASE}/questions/${questionId}/reactions/`;
     const requestBody = { type };
 
     console.log("📡 API 호출:", {
@@ -59,6 +59,13 @@ export async function handleReaction(
         type,
       });
 
+      // 404 에러인 경우 엔드포인트 문제임을 명시
+      if (response.status === 404) {
+        throw new Error(
+          `엔드포인트 오류: /questions/${questionId}/reactions/ 엔드포인트를 찾을 수 없습니다. (${response.status} ${response.statusText})`
+        );
+      }
+
       // 405 에러인 경우 메서드 문제임을 명시
       if (response.status === 405) {
         throw new Error(
@@ -81,6 +88,9 @@ export async function handleReaction(
     return {
       success: true,
       data: data,
+      // 서버에서 반환된 최신 like/dislike 카운트 포함
+      likeCount: data.like || 0,
+      dislikeCount: data.dislike || 0,
     };
   } catch (error) {
     console.error("❌ 리액션 처리 실패:", error);

@@ -69,10 +69,23 @@ const Reaction = ({ like = 0, dislike = 0, questionId, disabled }) => {
 
       // 서버에서 받은 실제 카운트로 업데이트
       if (result.data) {
+        console.log("📊 서버 응답 데이터:", result.data);
         setLikeCount(result.data.like || likeCount);
         setDislikeCount(result.data.dislike || dislikeCount);
+      } else if (
+        result.likeCount !== undefined ||
+        result.dislikeCount !== undefined
+      ) {
+        // handleReaction에서 반환된 카운트 사용
+        console.log("📊 handleReaction 응답 카운트:", {
+          likeCount: result.likeCount,
+          dislikeCount: result.dislikeCount,
+        });
+        setLikeCount(result.likeCount || likeCount);
+        setDislikeCount(result.dislikeCount || dislikeCount);
       } else {
         // 서버 응답이 없는 경우에만 클라이언트에서 증가
+        console.log("📊 클라이언트 카운트 증가:", clickedType);
         if (clickedType === "like") {
           setLikeCount((prev) => prev + 1);
         } else {
