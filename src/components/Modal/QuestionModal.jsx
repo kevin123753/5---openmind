@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createQuestion } from "../../features/post/postService";
+import { createQuestion } from "../../api/postApi";
 
 import styles from "./Modal.module.css";
 import Input from "../Input/Input";
@@ -36,10 +36,7 @@ const Modal = ({ setModal, id, setQueList, img, userName }) => {
             <Messages className={styles.icon} />
             <h3 className={styles.question}>질문을 작성하세요</h3>
           </div>
-          <Button
-            leftIcon={<CloseIcon />}
-            onClick={() => setModal(false)}
-          ></Button>
+          <Button leftIcon={<CloseIcon />} onClick={() => setModal(false)}></Button>
         </div>
         <form onSubmit={handleSubmit}>
           <p className={styles.title}>
@@ -57,12 +54,7 @@ const Modal = ({ setModal, id, setQueList, img, userName }) => {
             className={styles.modalTextarea}
             // style={{ fontSize: "1.6rem" }}
           />
-          <Button
-            variant="primary"
-            size="large"
-            className={styles.submitBtn}
-            disabled={!question.trim()}
-          >
+          <Button variant="primary" size="large" className={styles.submitBtn} disabled={!question.trim()}>
             질문 보내기
           </Button>
         </form>

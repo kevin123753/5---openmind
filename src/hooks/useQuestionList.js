@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { getQuestions } from "../features/post/postService";
+import { getQuestions } from "../api/postApi";
 
 const useQuestionList = (userId) => {
   const [queList, setQueList] = useState([]);
@@ -7,6 +7,7 @@ const useQuestionList = (userId) => {
   const fetchQuestions = useCallback(async () => {
     try {
       const data = await getQuestions(userId, 10000, 0); // userId는 문자열이어야 함
+      console.log("질문리스트 데이터 ", data);
       if (Array.isArray(data.results)) {
         setQueList(data.results);
       } else {

@@ -1,6 +1,5 @@
 .wrap:has(.qAPage) {
-  background: var(--gray-color-20) url(/image/post/topBg.jpg) no-repeat top
-    center;
+  background: var(--gray-color-20) url(/image/post/topBg.jpg) no-repeat top center;
 }
 .inner {
   display: flex;
@@ -113,6 +112,9 @@
   gap: 1.2rem;
   margin-bottom: 3.2rem;
 }
+.questionContent > div {
+  flex: 1 1 auto;
+}
 .questionContent img {
   width: 4.8rem;
   height: 4.8rem;
@@ -200,6 +202,16 @@
 }
 .answerBtnContents {
   width: 71.6rem;
+}
+/* 답변하기 폼 부분 */
+
+.answerInput {
+  width: 100%;
+  color: var(--gray-color-60);
+}
+.answerBtn {
+  width: 100%;
+  margin-top: 0.8rem;
 }
 
 /* 답변하기 페이지 삭제 버튼 */

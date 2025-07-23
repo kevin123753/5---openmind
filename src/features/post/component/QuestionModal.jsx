@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createQuestion } from "../postService";
+import { createQuestion } from "../../../api/postApi";
 
 import styles from "../../../components/Modal/Modal.module.css";
 import Input from "../../../components/Input/Input";
@@ -47,7 +47,7 @@ const Modal = ({ setModal, id, setQueList, img, userName }) => {
           </p>
           <Input
             type="textarea"
-            variant="primary"
+            variant="filled"
             size="large"
             placeholder="질문을 입력해주세요"
             value={question}

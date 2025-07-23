@@ -54,7 +54,7 @@ const AnswerList = ({
       <div>
         <p className="user">
           {userName}
-          {/* <span>{dayjs(item.createdAt).fromNow()}</span> */}
+          <span>{dayjs(item.createdAt).fromNow()}</span>
         </p>
         <div>
           {isEditing ? (
@@ -62,15 +62,20 @@ const AnswerList = ({
             <div>
               <Input
                 type="textarea"
+                variant="filled"
                 value={editedContent}
                 onChange={(e) => setEditedContent(e.target.value)}
                 placeholder="답변을 입력해주세요"
                 disabled={isLoading}
+                style={{ height: "18.6rem" }}
+                className="answerInput"
               />
               <Button
+                size="medium"
+                variant="primary"
                 disabled={!editedContent.trim() || isLoading}
                 onClick={() => onEditComplete(item.answer.id)}
-              >
+                className="answerBtn">
                 {isLoading ? "수정 중..." : "수정완료"}
               </Button>
             </div>
@@ -92,15 +97,20 @@ const AnswerList = ({
                 <div>
                   <Input
                     type="textarea"
+                    variant="filled"
                     value={newAnswerContent}
                     onChange={(e) => setNewAnswerContent(e.target.value)}
                     placeholder="답변을 입력해주세요"
                     disabled={isLoading}
+                    style={{ height: "18.6rem" }}
+                    className="answerInput"
                   />
                   <Button
+                    size="medium"
+                    variant="primary"
                     disabled={!newAnswerContent.trim() || isLoading}
                     onClick={() => onNewAnswer(item.id)}
-                  >
+                    className="answerBtn">
                     {isLoading ? "답변 중..." : "답변완료"}
                   </Button>
                 </div>
