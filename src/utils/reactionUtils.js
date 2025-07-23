@@ -2,11 +2,21 @@ import { getItem, setItem } from "./localStorage";
 
 const API_BASE = "https://openmind-api.vercel.app/17-5";
 
+// API Base URL 검증
+console.log("🔧 API_BASE 확인:", API_BASE);
+
 export async function handleReaction(
   questionId,
   type,
   storageKey = "reactedQuestions"
 ) {
+  // 대체 엔드포인트 목록 (API 명세가 다를 경우 대비)
+  const ENDPOINT_VARIANTS = [
+    `/questions/${questionId}/reactions/`,
+    `/questions/${questionId}/reaction/`,
+    `/questions/${questionId}/reactions`,
+    `/questions/${questionId}/reaction`,
+  ];
   const reacted = getItem(storageKey) || [];
   const reactionKey = `${type}-${questionId}`;
 
@@ -22,8 +32,20 @@ export async function handleReaction(
   }
 
   try {
-    const requestUrl = `${API_BASE}/questions/${questionId}/reactions/`;
+    // 첫 번째 엔드포인트로 시도
+    const primaryEndpoint = ENDPOINT_VARIANTS[0];
+    const requestUrl = new URL(primaryEndpoint, API_BASE).href;
     const requestBody = { type };
+
+    console.log("🔧 API 요청 준비:", {
+      API_BASE,
+      questionId,
+      type,
+      requestUrl,
+      isAbsolute: requestUrl.startsWith("http"),
+      requestBody,
+      endpointVariants: ENDPOINT_VARIANTS,
+    });
 
     console.log("📡 API 호출:", {
       url: requestUrl,
@@ -35,8 +57,13 @@ export async function handleReaction(
 
     const response = await fetch(requestUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
       body: JSON.stringify(requestBody),
+      mode: "cors",
+      credentials: "omit",
     });
 
     console.log("📡 응답:", {
@@ -61,8 +88,17 @@ export async function handleReaction(
 
       // 404 에러인 경우 엔드포인트 문제임을 명시
       if (response.status === 404) {
+        console.error("❌ 404 에러 상세 정보:", {
+          requestUrl,
+          API_BASE,
+          questionId,
+          type,
+          responseHeaders: Object.fromEntries(response.headers.entries()),
+          responseUrl: response.url,
+        });
+
         throw new Error(
-          `엔드포인트 오류: /questions/${questionId}/reactions/ 엔드포인트를 찾을 수 없습니다. (${response.status} ${response.statusText})`
+          `엔드포인트 오류: ${requestUrl} 엔드포인트를 찾을 수 없습니다. (${response.status} ${response.statusText})`
         );
       }
 
