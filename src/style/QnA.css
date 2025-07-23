@@ -1,5 +1,6 @@
 .wrap:has(.qAPage) {
-  background: var(--gray-color-20) url(/image/post/topBg.jpg) no-repeat top center;
+  background: var(--gray-color-20) url(/image/post/topBg.jpg) no-repeat top
+    center;
 }
 .inner {
   display: flex;
