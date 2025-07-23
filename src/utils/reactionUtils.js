@@ -1,6 +1,6 @@
 import { getItem, setItem } from "./localStorage";
 
-const API_BASE = "/api/17-5";
+const API_BASE = "https://openmind-api.vercel.app/17-5";
 
 export async function handleReaction(
   questionId,
@@ -22,24 +22,40 @@ export async function handleReaction(
   }
 
   try {
-    console.log(
-      "📡 API 호출:",
-      `${API_BASE}/questions/${questionId}/reaction/`
-    );
-    const response = await fetch(
-      `${API_BASE}/questions/${questionId}/reaction/`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type }),
-      }
-    );
-    console.log("📡 응답:", { status: response.status, ok: response.ok });
+    const requestUrl = `${API_BASE}/questions/${questionId}/reaction/`;
+    const requestBody = { type };
+
+    console.log("📡 API 호출:", {
+      url: requestUrl,
+      method: "PATCH",
+      body: requestBody,
+      questionId,
+      type,
+    });
+
+    const response = await fetch(requestUrl, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestBody),
+    });
+
+    console.log("📡 응답:", {
+      status: response.status,
+      statusText: response.statusText,
+      ok: response.ok,
+      headers: Object.fromEntries(response.headers.entries()),
+    });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("❌ API 실패:", errorText);
-      throw new Error(`서버 오류: ${response.status}`);
+      console.error("❌ API 실패:", {
+        status: response.status,
+        statusText: response.statusText,
+        errorText,
+        url: requestUrl,
+        body: requestBody,
+      });
+      throw new Error(`서버 오류: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();

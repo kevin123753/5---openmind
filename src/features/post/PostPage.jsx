@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 /****** utils ******/
@@ -44,7 +44,21 @@ const PostPage = () => {
 
   // hook에서 변수 받아옴
   const { userId, userName, img } = usePostUserInfo({ id, name, imageSource });
-  const { queList, setQueList } = useQuestionList(userId);
+  const { queList, setQueList, refetch } = useQuestionList(userId);
+
+  // 페이지 포커스 시 데이터 새로고침
+  useEffect(() => {
+    const handleFocus = () => {
+      if (userId && refetch) {
+        console.log("🔄 PostPage - 페이지 포커스, 데이터 새로고침");
+        refetch();
+      }
+    };
+
+    window.addEventListener("focus", handleFocus);
+    return () => window.removeEventListener("focus", handleFocus);
+  }, [userId, refetch]);
+
   if (!userId) {
     return null;
   }
@@ -83,11 +97,22 @@ const PostPage = () => {
       <div className="container">
         <h3>
           <MessagesIcon />
-          {queList.length > 0 ? `${queList.length}개의 질문이 있습니다` : "아직 질문이 없습니다"}
+          {queList.length > 0
+            ? `${queList.length}개의 질문이 있습니다`
+            : "아직 질문이 없습니다"}
         </h3>
-        {queList.length > 0 ? <QuestionList {...questionListProps} /> : <NoQuestion />}
+        {queList.length > 0 ? (
+          <QuestionList {...questionListProps} />
+        ) : (
+          <NoQuestion />
+        )}
       </div>
-      <Button variant="round" size="large" className="shadow-2 queBtn" onClick={() => setModal(!modal)}>
+      <Button
+        variant="round"
+        size="large"
+        className="shadow-2 queBtn"
+        onClick={() => setModal(!modal)}
+      >
         {size !== "small" ? "질문 작성하기" : "질문 작성"}
       </Button>
       {modal && <Modal {...modalProps} />}
