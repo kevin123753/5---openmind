@@ -17,7 +17,7 @@ const KakaoShareButton = ({ title = "질문하러 가기", imageUrl, url }) => {
         description: "OpenMind에서 질문을 남겨보세요!",
         imageUrl:
           imageUrl ||
-          "https://5team-openmind-qbdd-git-main-jaejoons-projects.vercel.app/image/favicon/apple-touch-icon.png",
+          "imageUrl: https://5team-openmind-qbdd-git-main-jaejoons-projects.vercel.app/image/favicon/apple-touch-icon.png",
         link: {
           mobileWebUrl: shareUrl,
           webUrl: shareUrl,

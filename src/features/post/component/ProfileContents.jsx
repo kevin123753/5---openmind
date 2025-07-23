@@ -52,7 +52,8 @@ const ProfileContents = ({ img, userName }) => {
         content: {
           title: "OpenMind에서 질문을 남겨보세요!",
           description: "링크로 접속해 바로 질문할 수 있어요.",
-          imageUrl: "https://openmind.dev/default-thumbnail.jpg", // ✅ 반드시 HTTPS
+          imageUrl:
+            "https://5team-openmind-qbdd-git-main-jaejoons-projects.vercel.app/image/favicon/apple-touch-icon.png",
           link: {
             mobileWebUrl: shareUrl,
             webUrl: shareUrl,
@@ -76,7 +77,7 @@ const ProfileContents = ({ img, userName }) => {
 
   const handleFacebookShare = () => {
     const shareUrl =
-      "https://5team-openmind-qbdd-git-main-jaejoons-projects.vercel.app/share-facebook";
+      "https://5team-openmind-qbdd-dlsiph62l-jaejoons-projects.vercel.app/share-facebook";
     const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
       shareUrl
     )}`;
