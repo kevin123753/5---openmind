@@ -3,7 +3,7 @@ import useCopyUrlToast from "../../../hooks/useCopyUrlToast";
 import Button from "../../../components/Button/Button";
 import Link from "../../../components/Icon/LinkIcon";
 import Kakao from "../../../components/Icon/KakaoIcon";
-import Facebook from "../../../components/Icon/FacebookIcon";
+import FacebookIcon from "../../../components/Icon/FacebookIcon";
 import Toast from "../../../components/Toast/Toast";
 
 const ProfileContents = ({ img, userName, onImageChange }) => {
@@ -118,6 +118,15 @@ const ProfileContents = ({ img, userName, onImageChange }) => {
     event.target.value = "";
   };
 
+  const handleFacebookShare = () => {
+    const shareUrl =
+      "https://5team-openmind-qbdd-git-main-jaejoons-projects.vercel.app/share-facebook";
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      shareUrl
+    )}`;
+    window.open(facebookUrl, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <div className="profileContents">
       <div className="profileImageContainer">
@@ -155,7 +164,8 @@ const ProfileContents = ({ img, userName, onImageChange }) => {
           variant="round"
           size="xsmall"
           className="styleFacebook"
-          leftIcon={<Facebook />}
+          leftIcon={<FacebookIcon />}
+          onClick={handleFacebookShare}
         />
       </div>
       {toast && <Toast message="URL이 복사되었습니다" />}
